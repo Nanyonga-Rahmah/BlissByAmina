@@ -51,13 +51,13 @@ export function SignUpForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="grid grid-cols-2 gap-4 my-4"
+        className="grid md:grid-cols-2   gap-4 my-4"
       >
         <FormField
           control={form.control}
           name="firstName"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="md:col-span-1 col-span-2 ">
               <div className="relative">
                 <FormControl>
                   <input
@@ -85,7 +85,7 @@ export function SignUpForm() {
           control={form.control}
           name="lastName"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="md:col-span-1 col-span-2">
               <div className="relative">
                 <FormControl>
                   <input
