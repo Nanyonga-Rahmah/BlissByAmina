@@ -1,37 +1,45 @@
 export default function HeroSection() {
   return (
-    <section className="relative w-full min-h-[80vh] flex items-center justify-center overflow-hidden bg-[#F7F5F4]">
-      {/* LEFT IMAGE */}
-      <img
-        src="/images/hero-left.png"
-        alt="Braiding stylist"
-        className="hidden md:block absolute left-0 top-0 h-full object-cover"
-      />
+    <section className="relative w-full h-[90vh] overflow-hidden bg-white  text-black flex items-center justify-center">
+      {/* Left Image */}
+      <div
+        className="absolute top-0 left-0 h-full w-1/2 bg-cover bg-center"
+        style={{
+          clipPath: "polygon(0 0, 30% 0, 80% 100%, 0 100%)",
+          backgroundImage: "url('/images/hero-left.png')",
+        }}
+      ></div>
 
-      {/* RIGHT IMAGE */}
-      <img
-        src="/images/hero-right.png"
-        alt="Styled client"
-        className="hidden md:block absolute right-0 top-0 h-full object-cover"
-      />
+      {/* Right Image */}
+      <div
+        className="absolute top-0 right-0 h-full w-1/2 bg-cover bg-center"
+        style={{
+          clipPath: "polygon(70% 0, 100% 0, 100% 100%, 20% 100%)",
+          backgroundImage: "url('/images/hero-right.png')",
+        }}
+      ></div>
 
-      {/* CENTER CONTENT */}
-      <div className="relative z-10 text-center px-4 max-w-2xl">
-        <h1 className="text-4xl md:text-6xl font-bold text-[#000] leading-tight">
-          Your Hair, Our Craft
-        </h1>
-
-        <p className="mt-4 text-lg md:text-xl text-[#595959]">
-          Luxury braiding services tailored for you.
+      {/* Center Content */}
+      <div className="relative z-20 text-center max-w-2xl px-6">
+        <h1 className="text-5xl font-bold italic mb-4 font-fair">TravelHair Stylist</h1>
+        <p className="mb-8 text-lg opacity-90">
+          Providing expert hair braiding services tailored to your unique style
+          and preferences, all in the comfort of your home.
         </p>
 
-        <button className="mt-6 bg-black text-white px-8 py-3 rounded-full text-base md:text-lg hover:bg-[#222] transition">
-          Book Appointment
-        </button>
+        <div className="flex items-center justify-center gap-4">
+          <button className="px-6 py-3 rounded-full bg-black text-white font-semibold shadow">
+            BOOK NOW
+          </button>
+
+          <button className="px-6 py-3 rounded-full text-black bg-[#F4F4F5] border border-white font-semibold">
+            BUY ACCESSORIES
+          </button>
+        </div>
       </div>
 
-      {/* OVERLAY GRADIENT FOR MOBILE TO KEEP IT CLEAN */}
-      <div className="absolute inset-0 md:hidden bg-gradient-to-t from-[#f7f5f4] to-transparent"></div>
+      {/* Dark overlay to blend images */}
+      {/* <div className="absolute inset-0 bg-black/40 z-10"></div> */}
     </section>
   );
 }
