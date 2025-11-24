@@ -1,7 +1,9 @@
-import HeroBanner from "@/components/Banner"
+import HeroBanner from "@/components/LandingPage/Banner"
 import Navigation from "@/components/header"
-import HeroSection from "@/components/hero"
-import Services from "@/components/Services"
+import HeroSection from "@/components/LandingPage/hero"
+import Services from "@/components/LandingPage/Services"
+// import Accessories from "@/components/LandingPage/HairAccesories"
+// import Quote from "@/components/LandingPage/Quote"
 
 function LandingPage() {
   return (
@@ -10,7 +12,9 @@ function LandingPage() {
         <HeroSection/>
         <HeroBanner/>
         <Services/>
-      
+        {/* <Accessories/>
+        <Quote/>
+       */}
     </div>
   )
 }
