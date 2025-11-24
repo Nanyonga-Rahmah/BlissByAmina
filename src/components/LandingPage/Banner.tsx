@@ -31,13 +31,18 @@ export default function HeroBanner() {
             {item}
           </span>
         ))}
+         {items.map((item, index) => (
+          <span key={index + items.length} className="font-medium text-lg mr-10">
+            {item}
+          </span>
+        ))}
       </div>
 
       <style>
         {`
           .animate-marquee {
             display: flex;
-            animation: marquee 8s linear infinite;
+            animation: marquee 12s linear infinite;
           }
 
           @keyframes marquee {

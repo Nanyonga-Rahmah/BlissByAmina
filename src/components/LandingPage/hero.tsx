@@ -6,7 +6,7 @@ export default function HeroSection() {
         className="absolute top-0 left-0 h-full w-1/2 bg-cover bg-center"
         style={{
           clipPath: "polygon(0 0, 30% 0, 80% 100%, 0 100%)",
-          backgroundImage: "url('/images/hero-left.png')",
+          backgroundImage: "url('/images/hero-left.webp')",
         }}
       ></div>
 
@@ -15,7 +15,7 @@ export default function HeroSection() {
         className="absolute top-0 right-0 h-full w-1/2 bg-cover bg-center"
         style={{
           clipPath: "polygon(70% 0, 100% 0, 100% 100%, 20% 100%)",
-          backgroundImage: "url('/images/hero-right.png')",
+          backgroundImage: "url('/images/hero-right.webp')",
         }}
       ></div>
 
