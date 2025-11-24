@@ -1,4 +1,4 @@
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 
 function Services() {
   const services = [
@@ -9,34 +9,33 @@ function Services() {
       url: "/images/boxbraids.png",
     },
     {
-      name: "Boxbraids / Twists",
-      description:
-        "Classic braids and twists in various sizes and lengths, extensions optional",
-      url: "/images/boxbraids.png",
+      name: "Boho Boxbraids / Twists",
+      description:"Trendy, textured braids with bohemian style, custom sizes available",
+      url: "/images/boho.png",
     },
     {
-      name: "Boxbraids / Twists",
+      name: "Cornrows",
       description:
-        "Classic braids and twists in various sizes and lengths, extensions optional",
-      url: "/images/boxbraids.png",
+        "Neat, intricate cornrows and Fulani braids for stylish patterns",
+      url: "/images/conrows.png",
     },
     {
-      name: "Boxbraids / Twists",
+      name: "Other Styles",
       description:
-        "Classic braids and twists in various sizes and lengths, extensions optional",
-      url: "/images/boxbraids.png",
+        "Crochet, faux locs, and French curls for versatile, protective looks",
+      url: "/images/other.png",
     },
     {
-      name: "Boxbraids / Twists",
+      name: "Hairstyles for Boys",
       description:
-        "Classic braids and twists in various sizes and lengths, extensions optional",
-      url: "/images/boxbraids.png",
+        "Cornrows, twists, and retwists designed for young boys’ hair",
+      url: "/images/boys.png",
     },
     {
-      name: "Boxbraids / Twists",
+      name: "Braids Removal Services",
       description:
-        "Classic braids and twists in various sizes and lengths, extensions optional",
-      url: "/images/boxbraids.png",
+        "Safe and professional removal of braids, locs, and protective styles",
+      url: "/images/removal.png",
     },
   ];
   return (
@@ -52,9 +51,14 @@ function Services() {
             key={index}
           >
             <div
-              className="h-[263px] bg-cover rounded-md"
-              style={{ backgroundImage: `url(${service.url})` }}
-            ></div>{" "}
+              className="h-[263px]  w-full rounded-md overflow-hidden"
+            >  
+            <img
+            src={service.url}
+            alt={service.name}
+            className="w-full h-full object-cover "
+          />
+          </div>{" "}
             <p className="font-bold text-[#18181B] mt-4">{service.name}</p>
             <p className="text-[#71717A] font-normal text-lg" >{service.description}</p>
             <Button className="rounded-4xl mt-3">BOOK NOW</Button>
