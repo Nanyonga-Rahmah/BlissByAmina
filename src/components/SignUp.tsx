@@ -5,7 +5,6 @@ import { UserIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { LoginDialog } from "./Login";
 import { useState } from "react";
-import { set } from "zod";
 
 export function SignUpDialog() {
 
