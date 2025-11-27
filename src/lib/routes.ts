@@ -1,0 +1,1 @@
+export const SignUpApi=()=>`${import.meta.env.VITE_BACKEND_URL}/auth/register`

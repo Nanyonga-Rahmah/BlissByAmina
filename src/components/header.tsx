@@ -9,7 +9,7 @@ export default function Navigation() {
         <span className="cursor-pointer">SERVICES</span>
         <span className="cursor-pointer">CONTACT US</span>
       </div>
-      <div className=" w-20 h-[70px] bg-[url(/logos/logo.png)] bg-cover"></div>
+      <div className=" w-24 h-[90px] bg-[url(/logos/logo.svg)] bg-cover"></div>
 
       <div className="flex items-center space-x-6 text-sm font-medium text-black">
         <span className="cursor-pointer">BOOK APPOINTMENT</span>
