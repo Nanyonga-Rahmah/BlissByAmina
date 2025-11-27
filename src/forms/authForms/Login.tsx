@@ -17,7 +17,11 @@ const formSchema = z.object({
   password: z.string().min(7, { message: "Password must be at least 7 characters long" }),
 });
 
-export function LoginForm() {
+interface LoginFormProps {
+  onForgotPassword: () => void;
+}
+
+export function LoginForm({ onForgotPassword }: LoginFormProps) {
   const [showPassword, setShowPassword] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -109,15 +113,21 @@ export function LoginForm() {
           )}
         />
 
-        <p className="text-[#4E4E55] text-sm text-center">Forgot password?</p>
+       
         <div className="relative w-full">
           <Button
             type="submit"
             className="w-full h-12 rounded-full bg-black text-white font-semibold"
           >
-            Sign in
+            Sign In
           </Button>
         </div>
+         <p
+          className="text-center underline cursor-pointer"
+          onClick={onForgotPassword}
+        >
+          Forgot password?
+        </p>
       </form>
     </Form>
   );
