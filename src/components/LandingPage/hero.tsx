@@ -22,7 +22,7 @@ export default function HeroSection() {
       {/* Center Content */}
       <div className="relative z-20 text-center max-w-2xl px-6">
         <h1 className="text-5xl font-bold italic mb-4 font-fair">TravelHair Stylist</h1>
-        <p className="mb-8 text-lg opacity-90">
+        <p className="mb-8 text-lg opacity-90  max-w-[400px]">
           Providing expert hair braiding services tailored to your unique style
           and preferences, all in the comfort of your home.
         </p>
