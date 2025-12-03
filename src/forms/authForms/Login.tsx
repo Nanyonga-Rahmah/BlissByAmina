@@ -11,10 +11,15 @@ import {
 } from "@/components/ui/form";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
+import { LoginInApi } from "@/lib/routes";
+import { toast } from "sonner";
+import { setAuthUser, setUserToken } from "@/lib/cookies/User-Management";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Enter a valid email" }),
-  password: z.string().min(7, { message: "Password must be at least 7 characters long" }),
+  password: z
+    .string()
+    .min(7, { message: "Password must be at least 7 characters long" }),
 });
 
 interface LoginFormProps {
@@ -23,6 +28,7 @@ interface LoginFormProps {
 
 export function LoginForm({ onForgotPassword }: LoginFormProps) {
   const [showPassword, setShowPassword] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     defaultValues: {
@@ -31,14 +37,34 @@ export function LoginForm({ onForgotPassword }: LoginFormProps) {
     },
   });
 
-  const onSubmit = () => {};
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    setSubmitting(true);
+    try {
+      const response = await fetch(LoginInApi(), {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      const userResponse = await response.json();
 
+      if (response.ok) {
+        setUserToken(userResponse.authResponse.token)
+        setAuthUser(userResponse.authResponse.userData)
+        toast.success("Login SuccessFul");
+      } else {
+        toast.error(userResponse.message);
+      }
+      console.log(response);
+    } catch (error) {
+    } finally {
+      setSubmitting(false);
+    }
+  };
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="grid gap-4 my-4"
-      >
+      <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4 my-4">
         <FormField
           control={form.control}
           name="email"
@@ -113,16 +139,16 @@ export function LoginForm({ onForgotPassword }: LoginFormProps) {
           )}
         />
 
-       
         <div className="relative w-full">
           <Button
+            disabled={submitting}
             type="submit"
             className="w-full h-12 rounded-full bg-black text-white font-semibold"
           >
-            Sign In
+            {submitting ? "Submitting" : "Sign In"}
           </Button>
         </div>
-         <p
+        <p
           className="text-center underline cursor-pointer"
           onClick={onForgotPassword}
         >

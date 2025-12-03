@@ -9,6 +9,8 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
+import { useState } from "react";
+import { SignUpApi } from "@/lib/routes";
 
 const formSchema = z.object({
   firstName: z.string().min(2, {
@@ -35,7 +37,13 @@ const formSchema = z.object({
     }),
 });
 
-export function SignUpForm() {
+interface SignUpProps {
+  setSuccess: React.Dispatch<React.SetStateAction<boolean>>;
+  setEmail: React.Dispatch<React.SetStateAction<string>>;
+  setFailure: React.Dispatch<React.SetStateAction<boolean>>;
+}
+export function SignUpForm({ setSuccess, setEmail, setFailure }: SignUpProps) {
+  const [submitting, setSubmitting] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     defaultValues: {
       firstName: "",
@@ -45,7 +53,31 @@ export function SignUpForm() {
     },
   });
 
-  const onSubmit = () => {};
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    setSubmitting(true);
+    try {
+      const response = await fetch(SignUpApi(), {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      const userResponse = await response.json();
+      setEmail(data.email);
+
+      console.log(userResponse);
+      if (response.ok) {
+        setSuccess(true);
+      } else {
+        setFailure(true);
+      }
+      console.log(response);
+    } catch (error) {
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   return (
     <Form {...form}>
@@ -173,6 +205,7 @@ export function SignUpForm() {
           <span className="text-[#52525B] font-bold"> Privacy Policy.</span>
         </p>
         <Button
+          disabled={submitting}
           type="submit"
           className="col-span-2 rounded-4xl font-bold text-base h-12 "
         >

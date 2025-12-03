@@ -1,7 +1,13 @@
-import { ShoppingCart} from "lucide-react";
+import { ShoppingCart } from "lucide-react";
 import { SignUpDialog } from "./SignUp";
+import { isAuthenticated } from "@/lib/cookies/User-Management";
+import { Account } from "./AccountPopover";
+import { LoginDialog } from "./Login";
 
 export default function Navigation() {
+  const isLoggedIn = isAuthenticated();
+
+  console.log(isLoggedIn);
   return (
     <div className="w-full flex items-center justify-between px-8 py-4 border-b bg-white">
       <div className="flex items-center space-x-8 text-sm font-medium text-black">
@@ -9,7 +15,7 @@ export default function Navigation() {
         <span className="cursor-pointer">SERVICES</span>
         <span className="cursor-pointer">CONTACT US</span>
       </div>
-      <div className=" w-20 h-[70px] bg-[url(/logos/logo.png)] bg-cover"></div>
+      <a className=" w-24 h-[90px] bg-[url(/logos/logo.svg)] bg-cover cursor-pointer" href="/"></a>
 
       <div className="flex items-center space-x-6 text-sm font-medium text-black">
         <span className="cursor-pointer">BOOK APPOINTMENT</span>
@@ -19,7 +25,7 @@ export default function Navigation() {
           <span>CART</span>
         </span>
 
-        <SignUpDialog />
+        {isLoggedIn ? <><Account /></> :<> <LoginDialog /></>}
       </div>
     </div>
   );
