@@ -23,7 +23,6 @@ const navigate=useNavigate()
         },
         body: JSON.stringify({email}),
       });
-      const userResponse = await response.json();
 
       if (response.ok) {
         toast.success("Link has been set successfully. Check email to continue");

@@ -1,5 +1,4 @@
 import { ShoppingCart } from "lucide-react";
-import { SignUpDialog } from "./SignUp";
 import { isAuthenticated } from "@/lib/cookies/User-Management";
 import { Account } from "./AccountPopover";
 import { LoginDialog } from "./Login";
