@@ -10,9 +10,15 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { useEffect, useState } from "react";
 import { LoginDialog } from "./Login";
 
-export function SignUpDialog() {
+interface SignUpProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}
+export function SignUpDialog({ open, onOpenChange }: SignUpProps) {
   const [success, setSuccess] = useState(false);
   const [failure, setFailure] = useState(false);
+    const [LoginOpen, setLoginOpen] = useState(false);
+
 
   const [email, setEmail] = useState("");
 
@@ -26,23 +32,16 @@ export function SignUpDialog() {
     }
   }, [success, failure]);
 
-  const [open, setOpen] = useState(false);
-  const [LoginOpen, setLoginOpen] = useState(false);
   const OnClick = () => {
-    setOpen(false);
+    onOpenChange(false);
+
     setLoginOpen(true);
   };
 
   return (
     <>
-      <Dialog open={open} onOpenChange={setOpen}>
+      <Dialog open={open} onOpenChange={onOpenChange}>
         <form>
-          <DialogTrigger asChild>
-            <span className="cursor-pointer flex items-center space-x-1">
-              <HugeiconsIcon icon={UserIcon} />
-              <span>SIGN IN</span>
-            </span>
-          </DialogTrigger>
           <DialogContent className=" md:w-[500px]">
             {success && (
               <div className="border flex items-center gap-3 mt-3 rounded-md border-[rgba(0,0,0,0.06)] shadow-md p-3">
@@ -97,7 +96,7 @@ export function SignUpDialog() {
         <LoginDialog
           open={LoginOpen}
           onOpenChange={setLoginOpen}
-          onSwitchToSignUp={() => setOpen(true)}
+          withTrigger={false}
         />
       )}
     </>

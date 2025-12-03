@@ -17,7 +17,7 @@ function Login() {
         <span className="font-bold text-black underline cursor-pointer">Sign up</span>
       </p>
 
-      <LoginForm />
+      {/* <LoginForm /> */}
     </AuthLayout>
   );
 }
