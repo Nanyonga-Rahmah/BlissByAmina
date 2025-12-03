@@ -3,7 +3,7 @@ import { AppointmentTable } from "@/components/tables/appointmentTable";
 import { Button } from "@/components/ui/button";
 import { PlusSignIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { useState } from "react";
+// import { useState } from "react";
 
 function OrderHistory() {
   const services = [
@@ -79,7 +79,7 @@ function OrderHistory() {
     },
   ];
 
-  const [activeState, setCurrentState] = useState<"services" | "products">("services");
+//   const [activeState, setCurrentState] = useState<"services" | "products">("services");
   return (
     <div>
       <Navigation />
