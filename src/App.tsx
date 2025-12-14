@@ -7,6 +7,7 @@ import ViewService from "./pages/ViewService";
 import Services from "./pages/Services";
 import ContactUs from "./pages/ContactUs";
 import BookingPolicyPage from "./pages/BookingPolicyPage";
+import TermsOfService from "./pages/TermsOfService";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path="/services" element={<Services />} />
           <Route path="/contact-us" element={<ContactUs />} />
           <Route path="/booking" element={<BookingPolicyPage />} />
+          <Route path="/terms" element={<TermsOfService />} />
         </Routes>
       </BrowserRouter>
     </>

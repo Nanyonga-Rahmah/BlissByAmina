@@ -14,6 +14,7 @@ import { Eye, EyeOff } from "lucide-react";
 import { LoginInApi } from "@/lib/routes";
 import { toast } from "sonner";
 import { setAuthUser, setUserToken } from "@/lib/cookies/User-Management";
+import { useNavigate } from "react-router-dom";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Enter a valid email" }),
@@ -31,6 +32,8 @@ export function LoginForm({ onForgotPassword,onClose }: LoginFormProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
+
+  const navigate=useNavigate()
   const form = useForm<z.infer<typeof formSchema>>({
     defaultValues: {
       email: "",
@@ -54,7 +57,10 @@ export function LoginForm({ onForgotPassword,onClose }: LoginFormProps) {
         setUserToken(userResponse.authResponse.token)
         setAuthUser(userResponse.authResponse.userData)
         toast.success("Login SuccessFul");
+
         onClose?.();
+
+        navigate("/")
       } else {
         toast.error(userResponse.message);
       }

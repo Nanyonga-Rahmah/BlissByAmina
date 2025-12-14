@@ -10,6 +10,8 @@ import { useNavigate } from "react-router-dom";
 
 export function Account() {
 const navigate=useNavigate()
+
+
 const HandleLogout=()=>{
     logout()
     navigate("/")

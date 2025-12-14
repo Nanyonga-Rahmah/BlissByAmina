@@ -1,7 +1,7 @@
 import Footer from "@/components/Footer";
 import Navigation from "@/components/header";
 
-function BookingPolicyPage() {
+function TermsOfService() {
   return (
     <section>
       <Navigation />
@@ -9,55 +9,45 @@ function BookingPolicyPage() {
       <div className="max-w-4xl mx-auto px-4 py-12">
         <div className="flex flex-col border-b bprder-[#E4E4E7] mb-6 items-center gap-2 pb-10">
           <h4 className="text-[#71717B]">BRAIDED BLISS BY AMINA</h4>
-          <h1 className="text-4xl font-bold ">Booking Policy</h1>
+          <h1 className="text-4xl font-bold ">Terms Of Service</h1>
           <span className="text-[#52525C]">
             Last updated: 16 November, 2025
           </span>
         </div>
         <div className="space-y-3 text-lg leading-relaxed">
           <p className="text-[#3F3F46] text-lg">
-            This Booking Policy outlines the terms and conditions for making,
-            preparing for, and canceling appointments with Braided Bliss by
-            Amina. By booking a service, you agree to follow the guidelines
-            below. These policies are designed to ensure a smooth experience for
-            both you and the service provider.
+            These Terms of Service (“Terms”) govern your use of the Braided
+            Bliss by Amina website and services. By accessing the website or
+            booking an appointment, you agree to be bound by these Terms.
           </p>
-          <h2 className="text-xl text-[#18181B] font-bold ">
-            1.Booking Requirements
-          </h2>
-          <h3 className="text-[#18181B] font-bold">1.1 Hair Extensions</h3>
-          <ul className="list-disc list-inside text-[#3F3F46] text-lg">
-            <li>Hair extensions are not included in the service price.</li>
+          <h2 className="text-xl text-[#18181B] font-bold ">1.Services</h2>
+          <ul className=" text-[#3F3F46] text-lg">
             <li>
-              If you need help getting extensions, please inform me in advance
-              so I can assist you.
-            </li>
-          </ul>
-          <h3 className="text-[#18181B] font-bold">1.2 Payment Method</h3>
-          <ul className="list-disc list-inside text-[#3F3F46]">
-            <li>I only accept Swish payments.</li>
-          </ul>
-          <h3 className="text-[#18181B] font-bold">1.3 Pets at home</h3>
-          <ul className="list-disc list-inside text-[#3F3F46]">
-            <li>
-              If you have pets at home and the appointment is at your location,
-              please let me know beforehand.
-            </li>
-          </ul>
-          <h3 className="text-[#18181B] font-bold">1.4 Hair Preparation</h3>
-          <ul className="list-disc list-inside text-[#3F3F46]">
-            <li>
-              Please ensure your hair is washed, clean, and blow-dried before
-              your appointment.
+              Braided Bliss by Amina provides professional hair braiding
+              services and related hair care services. All services are subject
+              to availability, location, and confirmation.
             </li>
             <li>
-              Arriving with unprepared hair may lead to delays or additional
-              charges.
+              Service descriptions, prices, and availability may be updated from
+              time to time.
             </li>
           </ul>
+
           <h2 className="text-2xl font-semibold mt-4">
-            2. Customer Cancellations
+            2. Bookings & Appointments
           </h2>
+          <ul className="list-disc list-inside text-[#3F3F46]">
+            <li>
+              All bookings must be made through the website or approved booking
+              channels.
+            </li>
+            <li>
+              You are responsible for providing accurate booking information,
+              including service selection, address, and contact details.
+            </li>
+            <li>Only one booking per time slot is allowed.</li>
+          </ul>
+          <p>By confirming a booking, you agree to the Booking Policy, including cancellation fees and preparation requirements.</p>
           <h3 className="text-[#18181B] font-bold">2.1 Cancellation Fees</h3>
           <p className="text-[#3F3F46]">
             Customers who cancel their bookings will be subject to the following
@@ -126,9 +116,7 @@ function BookingPolicyPage() {
             within 3-5 business days to the original payment method used during
             booking.
           </p>
-          <h2 className="text-xl font-bold ">
-            4. Contact Information{" "}
-          </h2>
+          <h2 className="text-xl font-bold ">4. Contact Information </h2>
           <p className="text-[#3F3F46]">
             For questions, concerns, or requests regarding this Cancellation
             Policy, please contact us at:
@@ -146,11 +134,9 @@ function BookingPolicyPage() {
               <span>+46728874011</span>
             </div>
           </div>
-          <h2 className="text-xl font-bold ">
-            Quick Reference Summary
-          </h2>
+          <h2 className="text-xl font-bold ">Quick Reference Summary</h2>
           <div className="border border-[#E4E4E7] rounded-[10px]  bg-[#FAFAFA] ">
-            <table className="w-full p-4 " >
+            <table className="w-full p-4 ">
               <thead className="border-b bg-[#F4F4F5]  h-14">
                 <tr className="">
                   <th className="text-left px-4">Cancellation Type</th>
@@ -185,4 +171,4 @@ function BookingPolicyPage() {
   );
 }
 
-export default BookingPolicyPage;
+export default TermsOfService;
