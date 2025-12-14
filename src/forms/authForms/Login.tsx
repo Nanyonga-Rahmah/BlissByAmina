@@ -24,9 +24,10 @@ const formSchema = z.object({
 
 interface LoginFormProps {
   onForgotPassword: () => void;
+  onClose?: () => void;
 }
 
-export function LoginForm({ onForgotPassword }: LoginFormProps) {
+export function LoginForm({ onForgotPassword,onClose }: LoginFormProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
@@ -53,6 +54,7 @@ export function LoginForm({ onForgotPassword }: LoginFormProps) {
         setUserToken(userResponse.authResponse.token)
         setAuthUser(userResponse.authResponse.userData)
         toast.success("Login SuccessFul");
+        onClose?.();
       } else {
         toast.error(userResponse.message);
       }

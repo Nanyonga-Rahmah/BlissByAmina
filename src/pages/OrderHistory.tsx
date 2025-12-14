@@ -1,3 +1,4 @@
+import Footer from "@/components/Footer";
 import Navigation from "@/components/header";
 import { AppointmentTable } from "@/components/tables/appointmentTable";
 import { Button } from "@/components/ui/button";
@@ -110,6 +111,8 @@ function OrderHistory() {
           <AppointmentTable services={services} />
         </div>
       </div>
+              <Footer/>
+      
     </div>
   );
 }

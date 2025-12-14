@@ -3,16 +3,24 @@ import LandingPage from "./pages/LandingPage";
 import VerifyEmailPage from "./pages/VerifyEmailPage";
 import { Toaster } from "./components/ui/sonner";
 import OrderHistory from "./pages/OrderHistory";
+import ViewService from "./pages/ViewService";
+import Services from "./pages/Services";
+import ContactUs from "./pages/ContactUs";
+import BookingPolicyPage from "./pages/BookingPolicyPage";
 
 function App() {
   return (
     <>
-            <Toaster />
+      <Toaster />
       <BrowserRouter>
         <Routes>
-          <Route path="" element={<LandingPage />} />
+          <Route path="*" element={<LandingPage />} />
           <Route path="/auth/verify-email" element={<VerifyEmailPage />} />
-          <Route path="/orders" element={<OrderHistory/>}/>
+          <Route path="/orders" element={<OrderHistory />} />
+          <Route path="/service/:id" element={<ViewService />} />
+          <Route path="/services" element={<Services />} />
+          <Route path="/contact-us" element={<ContactUs />} />
+          <Route path="/booking" element={<BookingPolicyPage />} />
         </Routes>
       </BrowserRouter>
     </>
