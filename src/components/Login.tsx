@@ -33,6 +33,10 @@ export function LoginDialog({
     onSwitchToSignUp?.();
   };
 
+
+  const HandleClose=()=>{
+    setActualOpen(false);
+  }
   return (
     <>
       <Dialog open={actualOpen} onOpenChange={setActualOpen}>
@@ -59,7 +63,7 @@ export function LoginDialog({
             </span>
           </p>
 
-          <LoginForm onForgotPassword={() => setResetOpen(true)} />
+          <LoginForm onForgotPassword={() => setResetOpen(true)} onClose={HandleClose} />
         </DialogContent>
       </Dialog>
 
