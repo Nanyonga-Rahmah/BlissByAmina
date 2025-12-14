@@ -1,5 +1,4 @@
 import Navigation from "@/components/header";
-import Footer from "@/components/Footer";
 import { AppointmentTable } from "@/components/tables/appointmentTable";
 import { Button } from "@/components/ui/button";
 import { PlusSignIcon } from "@hugeicons/core-free-icons";

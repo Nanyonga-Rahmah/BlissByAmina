@@ -7,8 +7,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { IBooking } from "@/lib/interfaces/interface";
-import { Cancel01Icon, ViewIcon } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
+
 import { CancelBookingDialog } from "../CancelBookingDialog";
 import { ViewBookingDialog } from "../ViewBookingDetails";
 

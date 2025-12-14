@@ -9,24 +9,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+
 import { useState } from "react";
 
-import { ChevronDown } from "lucide-react";
 
-import { Calendar } from "@/components/ui/calendar";
 
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
@@ -48,11 +34,11 @@ export function CancelBookingDialog() {
     }
   };
 
-  const handleBack = () => {
-    if (currentStep > 1) {
-      setCurrentStep(currentStep - 1);
-    }
-  };
+//   const handleBack = () => {
+//     if (currentStep > 1) {
+//       setCurrentStep(currentStep - 1);
+//     }
+//   };
   setTimeout(() => {
     if (currentStep === 5) {
       setCurrentStep(6);
