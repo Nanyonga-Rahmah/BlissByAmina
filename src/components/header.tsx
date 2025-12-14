@@ -1,11 +1,19 @@
 import { ShoppingCart } from "lucide-react";
-import { isAuthenticated } from "@/lib/cookies/User-Management";
+import { getUserToken, isAuthenticated } from "@/lib/cookies/User-Management";
 import { Account } from "./AccountPopover";
 import { LoginDialog } from "./Login";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 export default function Navigation() {
-  const isLoggedIn = isAuthenticated();
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const token = getUserToken();
+
+
+  useEffect(() => {
+    const authStatus = isAuthenticated();
+    setIsLoggedIn(authStatus);
+  }, [token]);
 
   const navigate = useNavigate();
 

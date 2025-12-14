@@ -9,6 +9,8 @@ import {
 import type { IBooking } from "@/lib/interfaces/interface";
 import { Cancel01Icon, ViewIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import { CancelBookingDialog } from "../CancelBookingDialog";
+import { ViewBookingDialog } from "../ViewBookingDetails";
 
 interface AppointmentTableProps {
   services: IBooking[];
@@ -50,11 +52,8 @@ export function AppointmentTable({ services }: AppointmentTableProps) {
             <TableCell className="capitalize">{service.status}</TableCell>
             <TableCell className="">{service.bookingFee}</TableCell>
             <TableCell className="flex items-center gap-3">
-              <HugeiconsIcon icon={ViewIcon} color="#A1A1AA" />
-
-              {service.status === "upcoming" && (
-                <HugeiconsIcon icon={Cancel01Icon} color="#A1A1AA" />
-              )}
+              <ViewBookingDialog />
+              {service.status === "upcoming" && <CancelBookingDialog />}
             </TableCell>
           </TableRow>
         ))}

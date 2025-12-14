@@ -49,7 +49,7 @@ export function LoginDialog({
           </DialogTrigger>
         )}
 
-        <DialogContent className="md:w-[500px] hero-bg bg-cover bg-center">
+        <DialogContent className="md:w-[500px] hero-bg bg-cover bg-center left-[50%]">
           <h3 className="font-bold text-[#000000] md:text-2xl">Welcome Back</h3>
 
           <p className="text-[#62636C] md:text-base my-1 flex items-center space-x-1">

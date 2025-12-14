@@ -8,7 +8,7 @@ function Footer() {
 
       <div className="flex items-center gap-2">
         <span className="font-bold">Policies :</span>
-        <span>Terms Of Use</span>
+        <a href="/terms">Terms Of Use</a>
         <a href="/booking">Booking</a>
         <span>Privacy</span>
       </div>

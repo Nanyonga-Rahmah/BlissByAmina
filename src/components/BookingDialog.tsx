@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/popover";
 import { useState } from "react";
 
-import {  ChevronDown } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 
 import { Calendar } from "@/components/ui/calendar";
 
@@ -91,8 +91,10 @@ export function BookingDialog() {
     }
   };
   setTimeout(() => {
-    setCurrentStep(6);
-  }, 4000);
+    if (currentStep === 5) {
+      setCurrentStep(6);
+    }
+  }, 10000);
   return (
     <Dialog>
       <form>
@@ -101,7 +103,7 @@ export function BookingDialog() {
             Continue to Book
           </Button>
         </DialogTrigger>
-        <DialogContent className="w-[500px]">
+        <DialogContent className="w-[500px] left-[50%]">
           <DialogHeader>
             {currentStep <= 4 && <DialogTitle>Book an Appointment</DialogTitle>}{" "}
             {currentStep <= 2 && (
