@@ -41,7 +41,7 @@ export function SignUpDialog({ open, onOpenChange }: SignUpProps) {
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
         <form>
-          <DialogContent className=" md:w-[500px]">
+          <DialogContent className=" md:w-[500px] left-[50%]">
             {success && (
               <div className="border flex items-center gap-3 mt-3 rounded-md border-[rgba(0,0,0,0.06)] shadow-md p-3">
                 <HugeiconsIcon
