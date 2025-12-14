@@ -2,19 +2,31 @@ import { ShoppingCart } from "lucide-react";
 import { isAuthenticated } from "@/lib/cookies/User-Management";
 import { Account } from "./AccountPopover";
 import { LoginDialog } from "./Login";
+import { useNavigate } from "react-router-dom";
 
 export default function Navigation() {
   const isLoggedIn = isAuthenticated();
 
-  console.log(isLoggedIn);
+  const navigate = useNavigate();
+
+  const HandleClick = () => {
+    navigate("/");
+  };
+
   return (
     <div className="w-full flex items-center justify-between px-8 py-4 border-b bg-white">
       <div className="flex items-center space-x-8 text-sm font-medium text-black">
-        <span className="cursor-pointer">SHOP</span>
-        <span className="cursor-pointer">SERVICES</span>
-        <span className="cursor-pointer">CONTACT US</span>
+        <a className="cursor-pointer">SHOP</a>
+        <a className="cursor-pointer" href="/services">
+          SERVICES
+        </a>
+        <a className="cursor-pointer" href="/contact-us" target="_self">
+          CONTACT US
+        </a>
       </div>
-      <a className=" w-24 h-[90px] bg-[url(/logos/logo.svg)] bg-cover cursor-pointer" href="/"></a>
+      <div className=" w-24 h-[78px]   cursor-pointer" onClick={HandleClick}>
+        <img src="/logos/logo.svg" alt="Logo" width={100} height={100} />
+      </div>
 
       <div className="flex items-center space-x-6 text-sm font-medium text-black">
         <span className="cursor-pointer">BOOK APPOINTMENT</span>
@@ -24,7 +36,16 @@ export default function Navigation() {
           <span>CART</span>
         </span>
 
-        {isLoggedIn ? <><Account /></> :<> <LoginDialog /></>}
+        {isLoggedIn ? (
+          <>
+            <Account />
+          </>
+        ) : (
+          <>
+            {" "}
+            <LoginDialog />
+          </>
+        )}
       </div>
     </div>
   );
