@@ -9,7 +9,6 @@ export default function Navigation() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const token = getUserToken();
 
-
   useEffect(() => {
     const authStatus = isAuthenticated();
     setIsLoggedIn(authStatus);
@@ -23,7 +22,7 @@ export default function Navigation() {
 
   return (
     <div className="w-full flex items-center justify-between px-8 py-4 border-b bg-white">
-      <div className="flex items-center space-x-8 text-sm font-medium text-black">
+      <div className="hidden md:flex items-center space-x-8 text-sm font-medium text-black">
         <a className="cursor-pointer">SHOP</a>
         <a className="cursor-pointer" href="/services">
           SERVICES
@@ -32,11 +31,14 @@ export default function Navigation() {
           CONTACT US
         </a>
       </div>
-      <div className=" w-24 h-[78px]   cursor-pointer" onClick={HandleClick}>
+      <div
+        className=" md:w-24 md:h-[78px] w-16   cursor-pointer"
+        onClick={HandleClick}
+      >
         <img src="/logos/logo.svg" alt="Logo" width={100} height={100} />
       </div>
 
-      <div className="flex items-center space-x-6 text-sm font-medium text-black">
+      <div className="hidden md:flex items-center space-x-6 text-sm font-medium text-black">
         <span className="cursor-pointer">BOOK APPOINTMENT</span>
 
         <span className="cursor-pointer flex items-center space-x-1">
@@ -44,6 +46,19 @@ export default function Navigation() {
           <span>CART</span>
         </span>
 
+        {isLoggedIn ? (
+          <>
+            <Account />
+          </>
+        ) : (
+          <>
+            {" "}
+            <LoginDialog />
+          </>
+        )}
+      </div>
+
+      <div className="flex md:hidden">
         {isLoggedIn ? (
           <>
             <Account />
