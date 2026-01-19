@@ -1,5 +1,6 @@
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
   Form,
@@ -9,7 +10,7 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-
+import { useEffect } from "react";
 
 const formSchema = z.object({
   fullName: z.string().min(2, {
@@ -26,18 +27,30 @@ const formSchema = z.object({
   address: z.string().min(2, {
     message: "Field is required.",
   }),
-  email: z.email().min(2, { message: "Field is required." }),
-  notes: z.string().optional(),
+  email: z.string().email({ message: "Invalid email address" }),
+  notes: z.string().min(2, { message: "Field is required." }),
 });
 
-// interface SignUpProps {
-//   setSuccess: React.Dispatch<React.SetStateAction<boolean>>;
-//   setEmail: React.Dispatch<React.SetStateAction<string>>;
-//   setFailure: React.Dispatch<React.SetStateAction<boolean>>;
-// }
-export function UserDetailsForm() {
-//   const [submitting, setSubmitting] = useState(false);
+interface SignUpProps {
+  setUserDetails: React.Dispatch<
+    React.SetStateAction<{
+      fullName: string;
+      phoneNumber: string;
+      email: string;
+      address: string;
+      notes: string;
+    }>
+  >;
+  onValidityChange: (isValid: boolean) => void;
+}
+export function UserDetailsForm({
+  setUserDetails,
+  onValidityChange,
+}: SignUpProps) {
+  //   const [submitting, setSubmitting] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
+    mode: "onChange", // 👈 IMPORTANT
+    resolver: zodResolver(formSchema),
     defaultValues: {
       fullName: "",
       phoneNumber: "",
@@ -47,35 +60,20 @@ export function UserDetailsForm() {
     },
   });
 
-  const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    console.log(data);
-    // setSubmitting(true);
-    // try {
-    //   const response = await fetch(SignUpApi(), {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify(data),
-    //   });
-    //   const userResponse = await response.json();
+  useEffect(() => {
+    onValidityChange(form.formState.isValid);
+  }, [form.formState.isValid]);
 
-    //   console.log(userResponse);
-    //   if (response.ok) {
-    //   } else {
-    //   }
-    //   console.log(response);
-    // } catch (error) {
-    // } finally {
-    //   setSubmitting(false);
-    // }
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    console.log("-->",data);
+    setUserDetails(data);
   };
 
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="grid md:grid-cols-2   gap-4 my-4"
+        className="grid md:grid-cols-2 gap-4 "
       >
         <FormField
           control={form.control}
@@ -188,7 +186,9 @@ export function UserDetailsForm() {
               </div>
 
               <FormMessage />
-              <FormDescription>We'll come to this address to provide the service</FormDescription>
+              <FormDescription>
+                We'll come to this address to provide the service
+              </FormDescription>
             </FormItem>
           )}
         />
@@ -220,7 +220,6 @@ export function UserDetailsForm() {
             </FormItem>
           )}
         />
-       
       </form>
     </Form>
   );
