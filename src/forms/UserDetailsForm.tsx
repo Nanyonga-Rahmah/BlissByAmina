@@ -11,6 +11,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useEffect } from "react";
+import { getAuthUser } from "@/lib/cookies/User-Management";
 
 const formSchema = z.object({
   fullName: z.string().min(2, {
@@ -42,30 +43,53 @@ interface SignUpProps {
     }>
   >;
   onValidityChange: (isValid: boolean) => void;
+  userDetails?: {
+    fullName: string;
+    phoneNumber: string;
+    email: string;
+    address: string;
+    notes: string;
+  };
 }
 export function UserDetailsForm({
   setUserDetails,
   onValidityChange,
+  userDetails
 }: SignUpProps) {
+
+  const user_email=getAuthUser()?.email||"";
   //   const [submitting, setSubmitting] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     mode: "onChange", // 👈 IMPORTANT
     resolver: zodResolver(formSchema),
     defaultValues: {
-      fullName: "",
-      phoneNumber: "",
-      email: "",
-      address: "",
-      notes: "",
+      fullName: userDetails?.fullName || "",
+      phoneNumber: userDetails?.phoneNumber || "",
+      email: user_email || "",
+      address: userDetails?.address || "",
+      notes: userDetails?.notes || "",
     },
   });
 
   useEffect(() => {
+    const subscription = form.watch((values) => {
+      setUserDetails({
+        fullName: values.fullName ?? "",
+        phoneNumber: values.phoneNumber ?? "",
+        email: user_email ?? "",
+        address: values.address ?? "",
+        notes: values.notes ?? "",
+      });
+    });
+
+    return () => subscription.unsubscribe();
+  }, [form]);
+
+  useEffect(() => {
     onValidityChange(form.formState.isValid);
-  }, [form.formState.isValid]);
+  }, [form.formState.isValid, onValidityChange]);
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    console.log("-->",data);
     setUserDetails(data);
   };
 
@@ -112,6 +136,7 @@ export function UserDetailsForm({
               <div className="relative">
                 <FormControl>
                   <input
+                  readOnly
                     {...field}
                     type="text"
                     id="email"

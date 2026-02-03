@@ -1,14 +1,32 @@
-import { useState } from "react";
+import type { IService, IVariant } from "@/lib/interfaces/interface";
+import type { CityOption } from "./BookingDialog";
 import { Button } from "./ui/button";
 
-function PaymentStatus() {
-  const [paymentStatus] = useState<
-    "pending" | "successful" | "failed"
-  >("failed");
+interface PaymentStatusProps {
+  success?: boolean;
+  failure?: boolean;
+  selectedVariant?: IVariant | null;
+  selectedCity?: CityOption | null;
+  selectedDate?: Date | null;
+  selectedTime?: string | null;
+  service?: IService | null;
+  totalFee?: number;
+  address?: string;
+}
+function PaymentStatus({
+  success,
+  totalFee,
+  selectedCity,
+  selectedVariant,
+  service,
+  address,
+}: PaymentStatusProps) {
+  // const [paymentStatus] = useState<
+  //   "pending" | "successful" | "failed"
+  // >("failed");
   return (
     <div>
-      {paymentStatus === "pending" && <p>Your payment is being processed...</p>}
-      {paymentStatus === "successful" && (
+      {success ? (
         <div className=" ">
           <div className="flex flex-col items-center justify-center">
             <div>
@@ -16,7 +34,7 @@ function PaymentStatus() {
             </div>
             <p className="mt-2 text-[#22C55E]">Booking Confirmed</p>
             <span className="text-[#18181B] mt-2 font-bold text-xl">
-              2100 SEK
+              {totalFee} SEK
             </span>
           </div>
 
@@ -26,16 +44,20 @@ function PaymentStatus() {
             <div className="flex items-center justify-between">
               <span className="text-[#71717A] text-[15px]">Service</span>
               <span className="text-[#18181B] text-[15px]">
-                Boxbraids / Twists
+                {service?.name}{" "}
               </span>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-[#71717A] text-[15px]">Size</span>
-              <span className="text-[#18181B] text-[15px]">S-Medium</span>
+              <span className="text-[#18181B] text-[15px]">
+                {selectedVariant?.name}
+              </span>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-[#71717A] text-[15px]">Length</span>
-              <span className="text-[#18181B] text-[15px]">Thigh</span>
+              <span className="text-[#18181B] text-[15px]">
+                {selectedVariant?.length}
+              </span>
             </div>
 
             <div className="flex items-center justify-between">
@@ -68,13 +90,13 @@ function PaymentStatus() {
 
             <div className="flex items-center justify-between">
               <span className="text-[#71717A] text-[15px]">City</span>
-              <span className="text-[#18181B] text-[15px]">Uppsala</span>
+              <span className="text-[#18181B] text-[15px]">
+                {selectedCity?.name}
+              </span>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-[#71717A] text-[15px]">Address</span>
-              <span className="text-[#18181B] text-[15px]">
-                Plot 36, Uppsala strt
-              </span>
+              <span className="text-[#18181B] text-[15px]">{address}</span>
             </div>
           </div>
           <div className="flex justify-between mt-8">
@@ -90,9 +112,7 @@ function PaymentStatus() {
             </Button>
           </div>
         </div>
-      )}
-
-      {paymentStatus === "failed" && (
+      ) : (
         <div>
           <div className="flex flex-col items-center justify-center">
             <div>
@@ -100,18 +120,18 @@ function PaymentStatus() {
             </div>
             <p className="mt-2 text-[#EF4444]">Booking Failed</p>
             <span className="text-[#18181B] mt-2 font-bold text-xl">
-              2100 SEK
+              {totalFee} SEK
             </span>
           </div>
           <div className=" my-3 border-t  border-2 border-dashed w-full border-[#E4E4E7] "></div>
 
           <p className="text-[#3F3F46] ">
-            Your payment of 2,100 SEK for Boxbraids / Twists didn’t go through.
-            Please try again or use a different payment method. If the issue
-            persists, contact support for help
+            Your payment of {totalFee} SEK for {service?.name} didn’t go
+            through. Please try again or use a different payment method. If the
+            issue persists, contact support for help
           </p>
 
-             <div className="flex justify-between mt-8">
+          <div className="flex justify-between mt-8">
             <Button
               variant="outline"
               className="rounded-full bg-[#F4F4F5]  border-none text-base"

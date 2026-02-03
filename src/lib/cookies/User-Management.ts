@@ -18,7 +18,7 @@ const getUserToken = () => {
 
 const getAuthUser = (): IUser | undefined => {
   const user =
-    typeof window !== "undefined" && localStorage.getItem("bliss_user_tkn");
+    typeof window !== "undefined" && localStorage.getItem("bliss_user");
 
   if (user) {
     try {

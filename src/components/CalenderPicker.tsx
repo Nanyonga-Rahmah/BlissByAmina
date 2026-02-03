@@ -22,17 +22,13 @@ export default function CalendarPicker({
   const today = new Date();
 
   const [currentDate, setCurrentDate] = useState(
-    new Date(today.getFullYear(), today.getMonth(), 1)
+    new Date(today.getFullYear(), today.getMonth(), 1),
   );
   //   const [selectedDate] = useState<Date | null>(null);
-
- 
 
   const availableDates = availableDays
     ?.filter((d: any) => d.status === "available")
     .map((d: any) => new Date(d.day));
-
-
 
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
@@ -41,7 +37,7 @@ export default function CalendarPicker({
   const firstDay = getFirstDayOfMonth(year, month);
 
   const days = Array.from({ length: firstDay + daysInMonth }, (_, i) =>
-    i < firstDay ? null : i - firstDay + 1
+    i < firstDay ? null : i - firstDay + 1,
   );
 
   return (
@@ -92,7 +88,8 @@ export default function CalendarPicker({
             <button
               key={index}
               disabled={!day}
-  onClick={() => dateForDay && onSelectDate(dateForDay)}              className={`h-16 w-16 rounded-lg flex items-center justify-center text-sm
+              onClick={() => dateForDay && onSelectDate(dateForDay)}
+              className={`h-16 w-16 rounded-lg flex items-center justify-center text-sm
     ${isAvailable ? "bg-black text-white font-bold" : ""}
         ${!day ? "invisible" : ""}
         ${isTodayDate ? " underline font-bold " : ""}
