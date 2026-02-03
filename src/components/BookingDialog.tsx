@@ -22,7 +22,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { ChevronDown } from "lucide-react";
 
@@ -36,6 +36,9 @@ import { useCities } from "@/lib/hooks/use-cities";
 import { useAvailableDays } from "@/lib/hooks/use-availabledays";
 import CalendarPicker from "./CalenderPicker";
 import { format } from "date-fns";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
+import { getUserToken, isAuthenticated } from "@/lib/cookies/User-Management";
 
 interface BookingDialogProps {
   selectedVariant?: IVariant | null;
@@ -43,7 +46,7 @@ interface BookingDialogProps {
   service?: IService;
 }
 
-interface CityOption {
+export interface CityOption {
   id?: number;
   name: string;
   travelFee?: number;
@@ -56,13 +59,31 @@ export function BookingDialog({
 }: BookingDialogProps) {
   const [open, setOpen] = useState(false);
   const [selectedCity, setSelectedCity] = useState<CityOption>();
-
+  const [success, setSuccess] = useState(false);
+  const [failure, setFailure] = useState(false);
+  const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
   const { cities } = useCities();
   const { availableDays } = useAvailableDays();
 
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const validAvailableDays = availableDays.filter((item) => {
+    const date = new Date(item.day);
+    date.setHours(0, 0, 0, 0);
+
+    return date >= today && item.status === "available";
+  });
+
   const filteredCities = cities.filter((city) => city.status === "active");
   const [currentStep, setCurrentStep] = useState(1);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const token = getUserToken();
 
+  useEffect(() => {
+    const authStatus = isAuthenticated();
+    setIsLoggedIn(authStatus);
+  }, [token]);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [availableTimes, setAvailableTimes] = useState<
@@ -85,7 +106,7 @@ export function BookingDialog({
   const handleDateSelect = (date: Date) => {
     const clickedDay = date.toISOString().split("T")[0];
 
-    const dayData = availableDays.find(
+    const dayData = validAvailableDays.find(
       (d) => new Date(d.day).toISOString().split("T")[0] === clickedDay,
     );
 
@@ -113,7 +134,7 @@ export function BookingDialog({
       if (!isUserFormValid) return;
     }
 
-    if (currentStep < 6) {
+    if (currentStep < 5) {
       setCurrentStep((prev) => prev + 1);
     }
   };
@@ -134,9 +155,11 @@ export function BookingDialog({
       <form>
         <DialogTrigger asChild>
           <Button
-            disabled={disabled}
+            disabled={disabled || !isLoggedIn}
             className={`uppercase text-white rounded-full w-full text-[20px] py-7 ${
-              disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
+              disabled || !isLoggedIn
+                ? "opacity-50 cursor-not-allowed"
+                : "cursor-pointer"
             } `}
           >
             Continue to Book
@@ -252,19 +275,25 @@ export function BookingDialog({
                   Select date
                 </p>
 
-                <div className="w-full h-full ">
-                  <CalendarPicker
-                    selectedDate={selectedDate}
-                    availableDays={availableDays}
-                    onSelectDate={handleDateSelect}
-                  />
+                {validAvailableDays.length > 0 ? (
+                  <div className="w-full h-full ">
+                    <CalendarPicker
+                      selectedDate={selectedDate}
+                      availableDays={validAvailableDays}
+                      onSelectDate={handleDateSelect}
+                    />
 
-                  {dateError && (
-                    <p className="mt-2 text-sm text-red-500 font-medium">
-                      {dateError}
-                    </p>
-                  )}
-                </div>
+                    {dateError && (
+                      <p className="mt-2 text-sm text-red-500 font-medium">
+                        {dateError}
+                      </p>
+                    )}
+                  </div>
+                ) : (
+                  <p className="mt-2 text-sm text-red-500 font-medium">
+                    No available dates at the moment. Please check back later.
+                  </p>
+                )}
               </div>
 
               <div className="rounded-[10px] border border-[#E4E4E7] p-3">
@@ -308,6 +337,7 @@ export function BookingDialog({
               <UserDetailsForm
                 setUserDetails={setUserDetails}
                 onValidityChange={setIsUserFormValid}
+                userDetails={userDetails}
               />
             </div>
           )}
@@ -386,11 +416,24 @@ export function BookingDialog({
           )}
 
           {currentStep === 4 && (
-            <div>
-              <CardDetailsForm />
-            </div>
+            <Elements stripe={stripePromise}>
+              <CardDetailsForm
+                setFailure={setFailure}
+                setSuccess={setSuccess}
+                totalFee={
+                  Number(selectedCity?.travelFee ?? 0) +
+                  Number(selectedVariant?.price ?? 0)
+                }
+                service={service}
+                selectedVariant={selectedVariant}
+                selectedCity={selectedCity}
+                selectedDate={selectedDate}
+                selectedTime={selectedTime}
+                handleNext={handleNext}
+              />
+            </Elements>
           )}
-
+          {/* 
           {currentStep === 5 && (
             <div className="flex flex-col my-8 items-center justify-center px-8">
               <div>
@@ -406,9 +449,24 @@ export function BookingDialog({
                 take a few seconds, don’t close this window.
               </p>
             </div>
-          )}
+          )} */}
 
-          {currentStep === 6 && <PaymentStatus />}
+          {currentStep === 5 && (
+            <PaymentStatus
+              success={success}
+              failure={failure}
+              totalFee={
+                Number(selectedCity?.travelFee ?? 0) +
+                Number(selectedVariant?.price ?? 0)
+              }
+              address={userDetails?.address}
+              service={service}
+              selectedVariant={selectedVariant}
+              selectedCity={selectedCity}
+              selectedDate={selectedDate}
+              selectedTime={selectedTime}
+            />
+          )}
           <DialogFooter className=" flex justify-between items-center my-5">
             {currentStep === 1 && (
               <DialogClose asChild>
@@ -420,7 +478,7 @@ export function BookingDialog({
                 </Button>
               </DialogClose>
             )}
-            {currentStep > 1 && currentStep <= 4 && (
+            {currentStep > 1 && currentStep < 4 && (
               <Button
                 variant="outline"
                 className="rounded-full  bg-[#F4F4F5]  border-none text-base"
@@ -429,7 +487,7 @@ export function BookingDialog({
                 Back
               </Button>
             )}
-            {currentStep <= 4 && (
+            {currentStep < 4 && (
               <Button
                 type="submit"
                 className="rounded-full  px-10 py-6 font-bold"
@@ -437,6 +495,7 @@ export function BookingDialog({
                 disabled={
                   !selectedDate ||
                   !selectedTime ||
+                  !selectedCity ||
                   (currentStep === 2 && !isUserFormValid)
                 }
               >

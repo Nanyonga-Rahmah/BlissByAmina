@@ -16,3 +16,11 @@ export const AllAvailableDays=()=>`${import.meta.env.VITE_BACKEND_URL}/available
 export const AllCities=()=>`${import.meta.env.VITE_BACKEND_URL}/cities`
 
 export const AllServices=()=>`${import.meta.env.VITE_BACKEND_URL}/services`
+
+export const MakePayment=()=>`${import.meta.env.VITE_BACKEND_URL}/payments/charge`
+
+export const CreateBooking=()=>`${import.meta.env.VITE_BACKEND_URL}/createBooking`
+
+export const UserBookings=(userId:number)=>`${import.meta.env.VITE_BACKEND_URL}/bookings/user/${userId}`
+
+export const CancelBooking=(bookingId:number)=>`${import.meta.env.VITE_BACKEND_URL}/bookings/cancel/${bookingId}`

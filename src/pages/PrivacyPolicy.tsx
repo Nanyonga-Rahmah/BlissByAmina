@@ -2,7 +2,7 @@ import Footer from "@/components/Footer";
 import Navigation from "@/components/header";
 import { Link } from "react-router-dom";
 
-function TermsOfService() {
+function PrivacyPolicy() {
   return (
     <section>
       <Navigation />
@@ -10,7 +10,7 @@ function TermsOfService() {
       <div className="max-w-4xl mx-auto px-4 py-12">
         <div className="flex flex-col border-b bprder-[#E4E4E7] mb-6 items-center gap-2 pb-10">
           <h4 className="text-[#71717B]">BRAIDED BLISS BY AMINA</h4>
-          <h1 className="text-4xl font-bold ">Terms Of Service</h1>
+          <h1 className="text-4xl font-bold ">Privacy Policy</h1>
           <span className="text-[#52525C]">
             Last updated: 16 November, 2025
           </span>
@@ -150,4 +150,4 @@ function TermsOfService() {
   );
 }
 
-export default TermsOfService;
+export default PrivacyPolicy;

@@ -28,12 +28,11 @@ interface LoginFormProps {
   onClose?: () => void;
 }
 
-export function LoginForm({ onForgotPassword,onClose }: LoginFormProps) {
+export function LoginForm({ onForgotPassword, onClose }: LoginFormProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
-
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   const form = useForm<z.infer<typeof formSchema>>({
     defaultValues: {
       email: "",
@@ -54,13 +53,16 @@ export function LoginForm({ onForgotPassword,onClose }: LoginFormProps) {
       const userResponse = await response.json();
 
       if (response.ok) {
-        setUserToken(userResponse.authResponse.token)
-        setAuthUser(userResponse.authResponse.userData)
-        toast.success("Login SuccessFul");
+        if (userResponse.authResponse.userData.userType === "admin") {
+          onClose?.();
+          navigate("/user-forbidden");
+        } else {
+          setUserToken(userResponse.authResponse.token);
+          setAuthUser(userResponse.authResponse.userData);
+          toast.success("Login SuccessFul");
 
-        onClose?.();
-
-        navigate("/")
+          navigate("/");
+        }
       } else {
         toast.error(userResponse.message);
       }
