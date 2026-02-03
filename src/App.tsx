@@ -8,6 +8,8 @@ import Services from "./pages/Services";
 import ContactUs from "./pages/ContactUs";
 import BookingPolicyPage from "./pages/BookingPolicyPage";
 import TermsOfService from "./pages/TermsOfService";
+import UserForbidden from "./pages/UserForbidden";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 
 function App() {
   return (
@@ -23,6 +25,9 @@ function App() {
           <Route path="/contact-us" element={<ContactUs />} />
           <Route path="/booking" element={<BookingPolicyPage />} />
           <Route path="/terms" element={<TermsOfService />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy/>}/>
+
+          <Route path="/user-forbidden" element={<UserForbidden/>}/>
         </Routes>
       </BrowserRouter>
     </>

@@ -10,7 +10,7 @@ function Footer() {
         <span className="font-bold">Policies :</span>
         <a href="/terms">Terms Of Use</a>
         <a href="/booking">Booking</a>
-        <span>Privacy</span>
+        <a href="/privacy-policy">Privacy</a>
       </div>
 
       <div className="flex items-center gap-4">
