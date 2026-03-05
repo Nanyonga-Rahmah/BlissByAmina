@@ -5,94 +5,26 @@ import { PlusSignIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useUserBookings } from "@/lib/hooks/user-userBookings";
 
 function OrderHistory() {
   const navigate = useNavigate();
 
   const [activeTab, setActiveTab] = useState<"services" | "products">(
-    "services"
+    "services",
   );
   const [statusFilter, setStatusFilter] = useState<
     "all" | "upcoming" | "completed" | "cancelled"
   >("all");
 
-  const services = [
-    {
-      name: "Boho boxbraids / Twists",
-      bookingDay: "12 Nov,2026",
-      bookingTime: "03:00am",
-      status: "upcoming",
-      city: "Upsala",
-      size: "S-medium",
-      length: "thigh",
-      bookingFee: "2100 SEK",
-    },
-    {
-      name: "Boho boxbraids / Twists",
-      bookingDay: "12 Nov,2026",
-      bookingTime: "03:00am",
-      status: "upcoming",
-      city: "Upsala",
-      size: "S-medium",
-      length: "thigh",
-      bookingFee: "2100 SEK",
-    },
-    {
-      name: "Boho boxbraids / Twists",
-      bookingDay: "12 Nov,2026",
-      bookingTime: "03:00am",
-      status: "upcoming",
-      city: "Upsala",
-      size: "S-medium",
-      length: "thigh",
-      bookingFee: "2100 SEK",
-    },
-    {
-      name: "Boho boxbraids / Twists",
-      bookingDay: "12 Nov,2026",
-      bookingTime: "03:00am",
-      status: "canceled",
-      city: "Upsala",
-      size: "S-medium",
-      length: "thigh",
-      bookingFee: "2100 SEK",
-    },
-    {
-      name: "Boho boxbraids / Twists",
-      bookingDay: "12 Nov,2026",
-      bookingTime: "03:00am",
-      status: "upcoming",
-      city: "Upsala",
-      size: "S-medium",
-      length: "thigh",
-      bookingFee: "2100 SEK",
-    },
-    {
-      name: "Boho boxbraids / Twists",
-      bookingDay: "12 Nov,2026",
-      bookingTime: "03:00am",
-      status: "upcoming",
-      city: "Upsala",
-      size: "S-medium",
-      length: "thigh",
-      bookingFee: "2100 SEK",
-    },
-    {
-      name: "Boho boxbraids / Twists",
-      bookingDay: "12 Nov,2026",
-      bookingTime: "03:00am",
-      status: "upcoming",
-      city: "Upsala",
-      size: "S-medium",
-      length: "thigh",
-      bookingFee: "2100 SEK",
-    },
-  ];
+  const { bookings } = useUserBookings();
+
+  console.log(bookings)
 
   const filteredServices =
     statusFilter === "all"
-      ? services
-      : services.filter((service) => service.status === statusFilter);
+      ? bookings
+      : bookings.filter((service) => service.status === statusFilter);
 
   return (
     <div className="min-h-screen bg-white">
@@ -137,14 +69,32 @@ function OrderHistory() {
             New Booking
           </Button>
         </div>
-
-        {/* Status Filters */}
+        {bookings.length === 0 ? (
+          <div className="text-center py-12">
+            <h2 className="text-lg font-semibold">No Appointments Found</h2>
+            <p className="text-gray-500">
+              You have no appointments scheduled at this time.
+            </p>
+          </div>
+        ):(
+          <>
+          
+          
         <div className="flex gap-3 mb-6">
           {[
-            { label: "All (1)", value: "all" },
-            { label: "Upcoming (1)", value: "upcoming" },
-            { label: "Completed (1)", value: "completed" },
-            { label: "Cancelled (2)", value: "cancelled" },
+            { label: `All (${bookings.length})`, value: "all" },
+            {
+              label: `Upcoming (${bookings.filter((b) => b.status === "upcoming").length})`,
+              value: "upcoming",
+            },
+            {
+              label: `Completed (${bookings.filter((b) => b.status === "completed").length})`,
+              value: "completed",
+            },
+            {
+              label: `Cancelled (${bookings.filter((b) => b.status === "cancelled").length})`,
+              value: "cancelled",
+            },
           ].map((filter) => (
             <button
               key={filter.value}
@@ -159,13 +109,16 @@ function OrderHistory() {
             </button>
           ))}
         </div>
-
+        
+        
         {/* Table */}
         <div className="border rounded-2xl overflow-hidden">
           <AppointmentTable services={filteredServices} />
-        </div>
-      </div>
+        </div></>
+        )}
 
+
+      </div>
     </div>
   );
 }

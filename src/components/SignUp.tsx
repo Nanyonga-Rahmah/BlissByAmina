@@ -26,7 +26,7 @@ export function SignUpDialog({ open, onOpenChange }: SignUpProps) {
       const timer = setTimeout(() => {
         setSuccess(false);
         setFailure(false);
-      }, 3000);
+      }, 5000);
       return () => clearTimeout(timer);
     }
   }, [success, failure]);
