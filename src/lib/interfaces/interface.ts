@@ -11,14 +11,19 @@ export interface IUser {
 
 export interface IBooking {
   id?: number;
-  name: string;
+  serviceName: string;
   bookingDay: string;
   bookingTime: string;
+  isCanceled: boolean;
   status: string;
-  city:string
-  size?:string,
-  length?:string,
-  bookingFee: string;
+  city: string;
+  size?: string;
+  length?: string;
+  userId: number;
+  amount: string;
+  travelfee?: string;
+  servicefee?: string;
+  createdAt: Date;
 }
 
 

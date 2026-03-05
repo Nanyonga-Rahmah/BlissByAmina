@@ -23,8 +23,13 @@ import { ScrollArea } from "./ui/scroll-area";
 
 import { Textarea } from "./ui/textarea";
 import CancellationStatus from "./CancellationStatus";
+import type { IBooking } from "@/lib/interfaces/interface";
 
-export function CancelBookingDialog() {
+interface CancelBookingDialogProps {
+  booking:IBooking;}
+
+
+export function CancelBookingDialog({booking}:CancelBookingDialogProps) {
   const [currentStep, setCurrentStep] = useState(1);
 
   const handleNext = () => {
@@ -95,18 +100,18 @@ export function CancelBookingDialog() {
                   <div className="flex items-center justify-between">
                     <span className="text-[#71717A] text-[15px]">Service</span>
                     <span className="text-[#18181B] text-[15px]">
-                      Boxbraids / Twists
+                      {booking.serviceName} / {booking.size} / {booking.length}
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-[#71717A] text-[15px]">Date</span>
                     <span className="text-[#18181B] text-[15px]">
-                      12 Nov, 2026 | 03:00am
+                      {booking.bookingDay} | {booking.bookingTime}
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-[#71717A] text-[15px]">City</span>
-                    <span className="text-[#18181B] text-[15px]">Uppsala</span>
+                    <span className="text-[#18181B] text-[15px]">{booking.city}</span>
                   </div>
 
                   <div className="border flex flex-col gap-2 border-[#E4E4E7] rounded-[12px] p-3">
@@ -114,9 +119,7 @@ export function CancelBookingDialog() {
                       <span className="text-[#71717A] text-[15px]">
                         Original amount
                       </span>
-                      <span className="text-[#18181B] text-[15px] font-medium">
-                        2,550 SEK
-                      </span>
+                      {Number(booking.amount).toLocaleString()} SEK
                     </div>
                     <div className="flex items-center justify-between text-[#DC2626]">
                       <span className="text-[15px]">Cancellation fee</span>
