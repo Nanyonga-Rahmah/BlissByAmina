@@ -64,7 +64,8 @@ const [selectedSize, setSelectedSize] = useState("Extra Small");
           <img
             src={service.url}
             alt={service.name}
-            className="w-full h-full object-cover "
+            style={{ objectPosition: "center 10%" }}
+            className="w-full h-full object-cover object-top "
           />
         </div>{" "}
         <div>

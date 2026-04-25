@@ -38,13 +38,14 @@ function Services() {
               className="rounded-[20px] border cursor-pointer border-[#E4E4E7] bg-[#FAFAFA] p-3"
               key={index}
             >
-              <div className="md:h-[263px]  w-full rounded-md overflow-hidden">
+              <div className="md:h-[263px] w-full rounded-md overflow-hidden">
                 <img
                   src={service.image}
                   alt={service.name}
-                  className="w-full h-full object-cover "
+                  style={{ objectPosition: "center 30%" }}
+                  className="w-full h-full object-cover object-top-left"
                 />
-              </div>{" "}
+              </div>
               <p className="font-bold text-[#18181B] mt-4">{service.name}</p>
               <p className="text-[#71717A] font-normal text-lg">
                 {service.description}

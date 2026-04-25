@@ -49,6 +49,7 @@ function ViewService() {
           <img
             src={service?.image}
             alt={service?.name}
+            style={{ objectPosition: "center 40%" }}
             className="w-full h-full object-cover object-center "
           />
         </div>{" "}
