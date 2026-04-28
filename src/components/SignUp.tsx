@@ -16,9 +16,14 @@ interface SignUpProps {
 export function SignUpDialog({ open, onOpenChange }: SignUpProps) {
   const [success, setSuccess] = useState(false);
   const [failure, setFailure] = useState(false);
-    const [LoginOpen, setLoginOpen] = useState(false);
+  const [serverFailure, setServerFailure] = useState(false);
+  const [LoginOpen, setLoginOpen] = useState(false);
 
+  const [internalOpen, setInternalOpen] = useState(false);
 
+  const isControlled = open !== undefined && !!onOpenChange;
+  const actualOpen = isControlled ? open! : internalOpen;
+  const setActualOpen = isControlled ? onOpenChange! : setInternalOpen;
   const [email, setEmail] = useState("");
 
   useEffect(() => {
@@ -31,15 +36,23 @@ export function SignUpDialog({ open, onOpenChange }: SignUpProps) {
     }
   }, [success, failure]);
 
-  const OnClick = () => {
-    onOpenChange(false);
+  if (success) {
+    setTimeout(() => {
+      setActualOpen(false);
+    }, 6000);
+  }
 
-    setLoginOpen(true);
+  const OnClick = () => {
+    setActualOpen(false);
+
+    setTimeout(() => {
+      setLoginOpen(true);
+    }, 200);
   };
 
   return (
     <>
-      <Dialog open={open} onOpenChange={onOpenChange}>
+      <Dialog open={actualOpen} onOpenChange={setActualOpen}>
         <form>
           <DialogContent className=" md:w-[500px] left-[50%]">
             {success && (
@@ -70,6 +83,19 @@ export function SignUpDialog({ open, onOpenChange }: SignUpProps) {
                 </span>
               </div>
             )}
+
+            {serverFailure && (
+              <div className="border flex items-center gap-3 mt-3 rounded-md border-[rgba(0,0,0,0.06)] shadow-md p-3">
+                <HugeiconsIcon
+                  icon={AlertCircleIcon}
+                  size={32}
+                  color="#D0021B"
+                />
+                <span className="text-red-700 font-normal">
+                  The server is currently down!,Please try again later{" "}
+                </span>
+              </div>
+            )}
             <h3 className="font-bold text-[#000000] md:text-2xl ">
               Create an Account
             </h3>
@@ -86,6 +112,7 @@ export function SignUpDialog({ open, onOpenChange }: SignUpProps) {
               setSuccess={setSuccess}
               setEmail={setEmail}
               setFailure={setFailure}
+              setServerFailure={setServerFailure}
             />
           </DialogContent>
         </form>

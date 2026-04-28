@@ -7,10 +7,10 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { UserIcon } from "@hugeicons/core-free-icons";
 
 interface LoginDialogProps {
-  open?: boolean;                       // optional
+  open?: boolean; // optional
   onOpenChange?: (open: boolean) => void; // optional
-  onSwitchToSignUp?: () => void;        // optional
-  withTrigger?: boolean;              
+  onSwitchToSignUp?: () => void; // optional
+  withTrigger?: boolean;
 }
 
 export function LoginDialog({
@@ -33,10 +33,9 @@ export function LoginDialog({
     onSwitchToSignUp?.();
   };
 
-
-  const HandleClose=()=>{
+  const HandleClose = () => {
     setActualOpen(false);
-  }
+  };
   return (
     <>
       <Dialog open={actualOpen} onOpenChange={setActualOpen}>
@@ -63,15 +62,20 @@ export function LoginDialog({
             </span>
           </p>
 
-          <LoginForm onForgotPassword={() => setResetOpen(true)} onClose={HandleClose} />
+          <LoginForm
+            onForgotPassword={() => setResetOpen(true)}
+            onClose={HandleClose}
+          />
         </DialogContent>
       </Dialog>
 
-      <ResetPasswordDialog
+
+{resetOpen && (<ResetPasswordDialog
         open={resetOpen}
         onOpenChange={setResetOpen}
         onBackToLogin={() => setResetOpen(false)}
-      />
+      />)}
+      
 
       {signUpOpen && (
         <SignUpDialog open={signUpOpen} onOpenChange={setSignUpDialog} />
