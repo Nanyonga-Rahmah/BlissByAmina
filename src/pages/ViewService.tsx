@@ -33,8 +33,14 @@ function ViewService() {
   );
 
   const sizes = [...new Set(filteredVariants.map((v) => v.name))];
+  
   const lengths = [
-    ...new Set(filteredVariants.map((v) => v.length).filter(Boolean)),
+    ...new Set(
+      filteredVariants
+        .filter((v) => v.name === selectedSize) // only lengths for selected size
+        .map((v) => v.length)
+        .filter(Boolean),
+    ),
   ];
 
   const canContinueToBook = Boolean(
@@ -64,7 +70,7 @@ function ViewService() {
           <div className="border h-px border-[#E4E4E7]"></div>
 
           <div className="my-5">
-            <h4>Size options</h4>
+            <h4 className="font-bold">Size options</h4>
             {sizes.map((sizeOption, index) => (
               <button
                 key={index}
@@ -83,22 +89,24 @@ function ViewService() {
           </div>
 
           <div className="my-5">
-            <h4>Length options</h4>
-            {lengths.map((lengthOption, index) => (
-              <button
-                key={index}
-                onClick={() => setSelectedLength(lengthOption ?? "")}
-                className={`border px-8 py-2 m-2 capitalize  cursor-pointer rounded-full 
+            <h4 className="font-bold">Length options</h4>
+            {selectedSize
+              ? lengths.map((lengthOption, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setSelectedLength(lengthOption ?? "")}
+                    className={`border px-8 py-2 m-2 capitalize  cursor-pointer rounded-full 
             ${
               selectedLength === lengthOption
                 ? "font-bold border-black"
                 : "font-normal"
             }
           `}
-              >
-                {lengthOption}
-              </button>
-            ))}
+                  >
+                    {lengthOption}
+                  </button>
+                ))
+              : (<p className="my-4">Choose size to view length Options</p>)}
           </div>
 
           <div className="border h-px border-[#E4E4E7]"></div>
