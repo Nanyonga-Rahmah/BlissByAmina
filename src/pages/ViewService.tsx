@@ -33,9 +33,7 @@ function ViewService() {
   );
 
   const sizes = [...new Set(filteredVariants.map((v) => v.name))];
-  // const lengths = [
-  //   ...new Set(filteredVariants.map((v) => v.length).filter(Boolean)),
-  // ];
+  
   const lengths = [
     ...new Set(
       filteredVariants
