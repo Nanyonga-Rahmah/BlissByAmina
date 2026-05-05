@@ -19,7 +19,6 @@ function OrderHistory() {
 
   const { bookings } = useUserBookings();
 
-  console.log(bookings)
 
   const filteredServices =
     statusFilter === "all"
