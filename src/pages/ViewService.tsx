@@ -3,6 +3,7 @@ import Navigation from "@/components/header";
 import Services from "@/components/LandingPage/Services";
 import { getUserToken, isAuthenticated } from "@/lib/cookies/User-Management";
 import { useService } from "@/lib/hooks/use-service";
+import { useServices } from "@/lib/hooks/use-services";
 import { useVariants } from "@/lib/hooks/use-variants";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -11,15 +12,19 @@ function ViewService() {
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [selectedLength, setSelectedLength] = useState<string | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+    const { id } = useParams();
+
   const token = getUserToken();
+    const serviceId = Number(id);
+
+    const { services, loading } = useServices();
+    const filteredServices = services.filter(service => service.id !== serviceId);
 
   useEffect(() => {
     const authStatus = isAuthenticated();
     setIsLoggedIn(authStatus);
   }, [token]);
-  const { id } = useParams();
 
-  const serviceId = Number(id);
   const { service } = useService({ serviceId });
   const { variants } = useVariants({ serviceId });
 
@@ -140,7 +145,7 @@ function ViewService() {
       </div>
 
       <div>
-        <Services />
+        <Services  Services={filteredServices} loading={loading}/>
       </div>
     </section>
   );
