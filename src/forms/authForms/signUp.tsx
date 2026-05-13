@@ -41,8 +41,14 @@ interface SignUpProps {
   setSuccess: React.Dispatch<React.SetStateAction<boolean>>;
   setEmail: React.Dispatch<React.SetStateAction<string>>;
   setFailure: React.Dispatch<React.SetStateAction<boolean>>;
+  setServerFailure: React.Dispatch<React.SetStateAction<boolean>>;
 }
-export function SignUpForm({ setSuccess, setEmail, setFailure }: SignUpProps) {
+export function SignUpForm({
+  setSuccess,
+  setEmail,
+  setFailure,
+  setServerFailure,
+}: SignUpProps) {
   const [submitting, setSubmitting] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     defaultValues: {
@@ -69,6 +75,8 @@ export function SignUpForm({ setSuccess, setEmail, setFailure }: SignUpProps) {
       console.log(userResponse);
       if (response.ok) {
         setSuccess(true);
+      } else if (response.status === 500) {
+        setServerFailure(true);
       } else {
         setFailure(true);
       }

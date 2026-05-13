@@ -1,8 +1,10 @@
 import { BookingDialog } from "@/components/BookingDialog";
 import Navigation from "@/components/header";
 import Services from "@/components/LandingPage/Services";
+import { Checkbox } from "@/components/ui/checkbox";
 import { getUserToken, isAuthenticated } from "@/lib/cookies/User-Management";
 import { useService } from "@/lib/hooks/use-service";
+import { useServices } from "@/lib/hooks/use-services";
 import { useVariants } from "@/lib/hooks/use-variants";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -11,15 +13,24 @@ function ViewService() {
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [selectedLength, setSelectedLength] = useState<string | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+
+  const [checked, setIsChecked] = useState<boolean>(false);
+
+  const { id } = useParams();
+
   const token = getUserToken();
+  const serviceId = Number(id);
+
+  const { services, loading } = useServices();
+  const filteredServices = services.filter(
+    (service) => service.id !== serviceId,
+  );
 
   useEffect(() => {
     const authStatus = isAuthenticated();
     setIsLoggedIn(authStatus);
   }, [token]);
-  const { id } = useParams();
 
-  const serviceId = Number(id);
   const { service } = useService({ serviceId });
   const { variants } = useVariants({ serviceId });
 
@@ -33,8 +44,14 @@ function ViewService() {
   );
 
   const sizes = [...new Set(filteredVariants.map((v) => v.name))];
+
   const lengths = [
-    ...new Set(filteredVariants.map((v) => v.length).filter(Boolean)),
+    ...new Set(
+      filteredVariants
+        .filter((v) => v.name === selectedSize) // only lengths for selected size
+        .map((v) => v.length)
+        .filter(Boolean),
+    ),
   ];
 
   const canContinueToBook = Boolean(
@@ -55,16 +72,18 @@ function ViewService() {
         </div>{" "}
         <div>
           <div className="flex  flex-col ">
-            <h3 className="text-[#18181B] font-bold text-[42px]">
-              {service?.name}
-            </h3>
+            <div className="flex items-center justify-between">
+              <h3 className="text-[#18181B] font-bold text-[42px]">
+                {service?.name}
+              </h3>
+            </div>
             <p className="text-[#3F3F46] text-base">{service?.description}</p>
           </div>
 
           <div className="border h-px border-[#E4E4E7]"></div>
 
           <div className="my-5">
-            <h4>Size options</h4>
+            <h4 className="font-bold">Size options</h4>
             {sizes.map((sizeOption, index) => (
               <button
                 key={index}
@@ -83,25 +102,41 @@ function ViewService() {
           </div>
 
           <div className="my-5">
-            <h4>Length options</h4>
-            {lengths.map((lengthOption, index) => (
-              <button
-                key={index}
-                onClick={() => setSelectedLength(lengthOption ?? "")}
-                className={`border px-8 py-2 m-2 capitalize  cursor-pointer rounded-full 
+            <h4 className="font-bold">Length options</h4>
+            {selectedSize ? (
+              lengths.map((lengthOption, index) => (
+                <button
+                  key={index}
+                  onClick={() => setSelectedLength(lengthOption ?? "")}
+                  className={`border px-8 py-2 m-2 capitalize  cursor-pointer rounded-full 
             ${
               selectedLength === lengthOption
                 ? "font-bold border-black"
                 : "font-normal"
             }
           `}
-              >
-                {lengthOption}
-              </button>
-            ))}
+                >
+                  {lengthOption}
+                </button>
+              ))
+            ) : (
+              <p className="my-4">Choose size to view length Options</p>
+            )}
           </div>
 
           <div className="border h-px border-[#E4E4E7]"></div>
+
+          {!service?.name.includes("removal") && (
+            <div>
+              <h3 className="font-bold text-lg">
+                Include Hair removal as an add on
+              </h3>
+              <Checkbox
+                checked={checked}
+                onCheckedChange={(value) => setIsChecked(!!value)}
+              />
+            </div>
+          )}
 
           <div className="flex items-center justify-between my-5">
             <span className="text-[#18181B] font-medium text-xl">Amount</span>
@@ -132,7 +167,7 @@ function ViewService() {
       </div>
 
       <div>
-        <Services />
+        <Services Services={filteredServices} loading={loading} />
       </div>
     </section>
   );
