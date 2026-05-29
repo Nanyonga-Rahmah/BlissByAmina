@@ -1,25 +1,27 @@
 import { useEffect, useState } from "react";
-import {    FetchVariants } from "../routes";
-import type {   IVariant } from "../interfaces/interface";
+import { FetchVariants } from "../routes";
+import type { IVariant } from "../interfaces/interface";
 
-
-interface useVariantProps{
-    serviceId:number
+interface UseVariantProps {
+  serviceId?: number;
 }
-export const useVariants = ({serviceId}:useVariantProps) => {
+
+export const useVariants = ({ serviceId }: UseVariantProps) => {
   const [variants, setVariants] = useState<IVariant[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (!serviceId) {
+      setVariants([]);
+      return;
+    }
+
     const fetchVariants = async () => {
       setLoading(true);
       setError(null);
 
       try {
-
-       
-
         const response = await fetch(FetchVariants(serviceId), {
           method: "GET",
           headers: {
@@ -27,23 +29,26 @@ export const useVariants = ({serviceId}:useVariantProps) => {
           },
         });
 
-        console.log(response)
         if (!response.ok) {
-          throw new Error("Failed to fetch cities");
+          throw new Error("Failed to fetch variants");
         }
-        
 
         const data = await response.json();
+
+        console.log("Variants response:", data);
+
         setVariants(data.variants ?? data);
-      } catch (err: any) {
-        setError(err.message || "Something went wrong");
+      } catch (err) {
+        setError(
+          err instanceof Error ? err.message : "Something went wrong"
+        );
       } finally {
         setLoading(false);
       }
     };
 
     fetchVariants();
-  }, []);
+  }, [serviceId]); 
 
   return {
     variants,
