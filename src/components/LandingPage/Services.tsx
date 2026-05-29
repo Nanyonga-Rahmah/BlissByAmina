@@ -52,7 +52,7 @@ function Services({Services,loading}:ServiceProps) {
                 />
               </div>
               <p className="font-bold text-[#18181B] mt-4">{service.name}</p>
-              <p className="text-[#71717A] font-normal text-lg">
+              <p className="text-[#71717A] font-normal text-lg line-clamp-2">
                 {service.description}
               </p>
               <Button

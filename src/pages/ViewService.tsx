@@ -12,6 +12,13 @@ import { useParams } from "react-router-dom";
 function ViewService() {
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [selectedLength, setSelectedLength] = useState<string | null>(null);
+
+  const [selectedRemovalSize, setSelectedRemovalSize] = useState<string | null>(
+    null,
+  );
+  const [selectedRemovalLength, setSelectedRemovalLength] = useState<
+    string | null
+  >(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
   const [checked, setIsChecked] = useState<boolean>(false);
@@ -34,16 +41,37 @@ function ViewService() {
   const { service } = useService({ serviceId });
   const { variants } = useVariants({ serviceId });
 
+  const removalService = services.find((service) =>
+    service.name.toLowerCase().includes("removal"),
+  );
+
+  const removalId = removalService?.id;
+
+  const { variants: removalvariants } = useVariants({
+    serviceId: removalId ?? 0,
+  });
+
   const filteredVariants = variants.filter(
     (variant) => variant.status === "active",
   );
 
+  const filteredRemovalVariants = removalvariants.filter(
+    (variant) => variant.status === "active",
+  );
   const selectedVariant = filteredVariants.find(
     (variant) =>
       variant.name === selectedSize && variant.length === selectedLength,
   );
 
+  const selectedRemovalVariant = filteredRemovalVariants.find(
+    (variant) =>
+      variant.name === selectedRemovalSize &&
+      variant.length === selectedRemovalLength,
+  );
+
   const sizes = [...new Set(filteredVariants.map((v) => v.name))];
+
+  const Removalsizes = [...new Set(filteredRemovalVariants.map((v) => v.name))];
 
   const lengths = [
     ...new Set(
@@ -54,6 +82,14 @@ function ViewService() {
     ),
   ];
 
+  const removalLengths = [
+    ...new Set(
+      filteredRemovalVariants
+        .filter((v) => v.name === selectedRemovalSize)
+        .map((v) => v.length)
+        .filter(Boolean),
+    ),
+  ];
   const canContinueToBook = Boolean(
     selectedSize && selectedLength && selectedVariant,
   );
@@ -128,13 +164,63 @@ function ViewService() {
 
           {!service?.name.includes("removal") && (
             <div>
-              <h3 className="font-bold text-lg">
-                Include Hair removal as an add on
-              </h3>
-              <Checkbox
-                checked={checked}
-                onCheckedChange={(value) => setIsChecked(!!value)}
-              />
+              <div className="flex items-center gap-4">
+                <h3 className="font-bold text-lg">
+                  Include Hair removal as an add on
+                </h3>
+                <Checkbox
+                  checked={checked}
+                  onCheckedChange={(value) => setIsChecked(!!value)}
+                />
+              </div>
+
+              {checked && (
+                <div className="h-40 overflow-y-scroll">
+                  <div className="my-5">
+                    <h4 className="font-bold">Size options</h4>
+                    {Removalsizes.map((sizeOption, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setSelectedRemovalSize(sizeOption)}
+                        className={`border px-4 py-2 m-2 capitalize cursor-pointer rounded-full 
+            ${
+              selectedRemovalSize === sizeOption
+                ? "font-bold border-black"
+                : "font-normal"
+            }
+          `}
+                      >
+                        {sizeOption}
+                      </button>
+                    ))}
+                  </div>
+
+                  <div className="my-5">
+                    <h4 className="font-bold">Length options</h4>
+                    {selectedRemovalSize ? (
+                      removalLengths.map((lengthOption, index) => (
+                        <button
+                          key={index}
+                          onClick={() =>
+                            setSelectedRemovalLength(lengthOption ?? "")
+                          }
+                          className={`border px-8 py-2 m-2 capitalize  cursor-pointer rounded-full 
+            ${
+              selectedRemovalLength === lengthOption
+                ? "font-bold border-black"
+                : "font-normal"
+            }
+          `}
+                        >
+                          {lengthOption}
+                        </button>
+                      ))
+                    ) : (
+                      <p className="my-4">Choose size to view length Options</p>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
@@ -143,7 +229,7 @@ function ViewService() {
 
             <span className="font-bold text-xl">
               {selectedVariant
-                ? `${selectedVariant.price.toLocaleString()} SEK`
+                ? `${(selectedVariant.price + (selectedRemovalVariant?.price ?? 0)).toLocaleString()} SEK`
                 : "--"}
             </span>
           </div>
