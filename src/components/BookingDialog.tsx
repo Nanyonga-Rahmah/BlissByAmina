@@ -44,6 +44,11 @@ interface BookingDialogProps {
   selectedVariant?: IVariant | null;
   disabled?: boolean;
   service?: IService;
+  hasRemovalAddOn?: boolean;
+
+  removalDetailsSize?: string;
+  removalDetailsLength?: string;
+  removalDetailsPrice?: number;
 }
 
 export interface CityOption {
@@ -56,6 +61,10 @@ export function BookingDialog({
   selectedVariant,
   disabled,
   service,
+  hasRemovalAddOn,
+  removalDetailsLength,
+  removalDetailsPrice,
+  removalDetailsSize,
 }: BookingDialogProps) {
   const [open, setOpen] = useState(false);
   const [selectedCity, setSelectedCity] = useState<CityOption>();
@@ -150,6 +159,8 @@ export function BookingDialog({
     }
   }, 10000);
 
+  const Total = (selectedVariant?.price ?? 0) + (removalDetailsPrice ?? 0);
+
   return (
     <Dialog>
       <form>
@@ -198,12 +209,21 @@ export function BookingDialog({
                   </span>
                   <span className="text-sm text-[#71717A]">Cost</span>
                 </div>
+
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-black font-bold">
                     {service?.name}
                   </span>
                   <span className="font-bold text-black">
-                    {selectedVariant?.price.toLocaleString()} SEK
+                    {Total.toLocaleString()} SEK
+                  </span>
+                </div>
+                <div className="flex items-center justify-between my-4">
+                  <span className="text-black font-bold text-sm">
+                    Has BraidRemoval as an add on?
+                  </span>
+                  <span className=" text-[[#71717A]]">
+                    {hasRemovalAddOn ? "Yes" : "No removal booked"}
                   </span>
                 </div>
               </div>
@@ -362,6 +382,42 @@ export function BookingDialog({
                   {selectedVariant?.length}
                 </span>
               </div>
+
+              <div className="flex items-center justify-between">
+                <span className="text-[#71717A] text-[15px]">
+                  Includes Hair Removal
+                </span>
+                <span className="text-[#18181B] capitalize font-bold text-[15px]">
+                  {hasRemovalAddOn ? "Yes" : "No removal booked"}
+                </span>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <span className="text-[#71717A] text-[15px]">
+                  Hair to be Removed
+                </span>
+                <span className="text-[#18181B] capitalize text-[15px]">
+                  {removalDetailsSize || "N/A"}{" "}
+                </span>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <span className="text-[#71717A] text-[15px]">
+                  Removal Length
+                </span>
+                <span className="text-[#18181B] capitalize text-[15px]">
+                  {removalDetailsLength || "N/A"}{" "}
+                </span>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <span className="text-[#71717A] text-[15px]">
+                  Removal Price
+                </span>
+                <span className="text-[#18181B]  font-bold capitalize text-[15px]">
+                  {removalDetailsPrice?.toLocaleString() || 0} SEK{" "}
+                </span>
+              </div>
               <div className="flex items-center justify-between">
                 <span className="text-[#71717A] text-[15px]">City</span>
                 <span className="text-[#18181B] capitalize text-[15px]">
@@ -406,8 +462,7 @@ export function BookingDialog({
                 </span>
                 <span className="text-[#18181B] text-[15px] font-bold">
                   {(
-                    Number(selectedCity?.travelFee ?? 0) +
-                    Number(selectedVariant?.price ?? 0)
+                    Number(selectedCity?.travelFee ?? 0) + Number(Total ?? 0)
                   ).toLocaleString()}{" "}
                   SEK
                 </span>
@@ -421,15 +476,19 @@ export function BookingDialog({
                 setFailure={setFailure}
                 setSuccess={setSuccess}
                 totalFee={
-                  Number(selectedCity?.travelFee ?? 0) +
-                  Number(selectedVariant?.price ?? 0)
+                  Number(selectedCity?.travelFee ?? 0) + Number(Total ?? 0)
                 }
                 service={service}
                 selectedVariant={selectedVariant}
                 selectedCity={selectedCity}
                 selectedDate={selectedDate}
                 selectedTime={selectedTime}
+                hasRemovalAddOn={hasRemovalAddOn ?? false}
+                removalDetailsLength={removalDetailsLength ?? ""}
+                removalDetailsPrice={String(removalDetailsPrice ?? "")}
+                removalDetailsSize={removalDetailsSize ?? ""}
                 handleNext={handleNext}
+                handleBack={handleBack}
               />
             </Elements>
           )}
@@ -456,8 +515,7 @@ export function BookingDialog({
               success={success}
               failure={failure}
               totalFee={
-                Number(selectedCity?.travelFee ?? 0) +
-                Number(selectedVariant?.price ?? 0)
+                Number(selectedCity?.travelFee ?? 0) + Number(Total ?? 0)
               }
               address={userDetails?.address}
               service={service}
