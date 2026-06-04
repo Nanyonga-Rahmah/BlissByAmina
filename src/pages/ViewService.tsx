@@ -90,6 +90,15 @@ function ViewService() {
         .filter(Boolean),
     ),
   ];
+
+  // const isChecked = Boolean(
+  //   checked &&
+  //   selectedRemovalSize &&
+  //   selectedRemovalLength &&
+  //   selectedSize &&
+  //   selectedLength &&
+  //   selectedVariant,
+  // );
   const canContinueToBook = Boolean(
     selectedSize && selectedLength && selectedVariant,
   );
@@ -238,6 +247,10 @@ function ViewService() {
             disabled={!canContinueToBook}
             selectedVariant={selectedVariant}
             service={service}
+            hasRemovalAddOn={checked}
+            removalDetailsLength={selectedRemovalLength ?? ""}
+            removalDetailsSize={selectedRemovalSize ?? ""}
+            removalDetailsPrice={selectedRemovalVariant?.price}
           />
 
           {!isLoggedIn && (

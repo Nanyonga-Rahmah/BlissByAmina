@@ -27,7 +27,7 @@ function Services({Services,loading}:ServiceProps) {
         </p>
       </div>
       <div className="grid  grid-cols-1 md:grid-cols-3 gap-5 ">
-        {Services.length === 0 && (
+        {Services.length === 0 && !loading && (
           <p className="text-center font-bold  col-span-3 py-8 ">
             No services provided at the moment
           </p>
