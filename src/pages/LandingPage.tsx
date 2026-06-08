@@ -27,7 +27,7 @@ function LandingPage() {
           setVisibleCount((prev) => prev + 6);
         }
       },
-      { threshold: 1 }
+      { threshold: 1 },
     );
 
     if (loaderRef.current) {
@@ -36,6 +36,8 @@ function LandingPage() {
 
     return () => observer.disconnect();
   }, [hasMore, services]);
+
+  console.log(services);
 
   return (
     <div>

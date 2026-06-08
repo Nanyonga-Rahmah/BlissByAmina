@@ -12,6 +12,7 @@ import { useParams } from "react-router-dom";
 function ViewService() {
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [selectedLength, setSelectedLength] = useState<string | null>(null);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   const [selectedRemovalSize, setSelectedRemovalSize] = useState<string | null>(
     null,
@@ -90,7 +91,14 @@ function ViewService() {
         .filter(Boolean),
     ),
   ];
+  const serviceImages =
+    service?.images && service.images.length > 0
+      ? service.images
+      : service?.image
+        ? [service.image]
+        : [];
 
+  const activeImage = selectedImage ?? serviceImages[0];
   // const isChecked = Boolean(
   //   checked &&
   //   selectedRemovalSize &&
@@ -103,18 +111,49 @@ function ViewService() {
     selectedSize && selectedLength && selectedVariant,
   );
 
+  useEffect(() => {
+    setSelectedImage(null);
+  }, [serviceId]);
+
   return (
     <section>
       <Navigation />
       <div className="grid px-10 md:grid-cols-2 md:gap-16 md:px-16 my-10">
-        <div className=" md:h-[500px]  rounded-md overflow-hidden">
-          <img
-            src={service?.image}
-            alt={service?.name}
-            style={{ objectPosition: "center 40%" }}
-            className="w-full h-full object-cover object-center "
-          />
-        </div>{" "}
+        <div>
+          <div className="md:h-[500px] rounded-md overflow-hidden bg-muted">
+            {activeImage && (
+              <img
+                src={activeImage}
+                alt={service?.name}
+                style={{ objectPosition: "center 40%" }}
+                className="w-full h-full object-cover object-center"
+              />
+            )}
+          </div>
+
+          {serviceImages.length > 1 && (
+            <div className="grid grid-cols-4 gap-3 mt-3">
+              {serviceImages.map((image, index) => (
+                <button
+                  key={index}
+                  type="button"
+                  onClick={() => setSelectedImage(image)}
+                  className={`h-24 rounded-md overflow-hidden border cursor-pointer ${
+                    activeImage === image
+                      ? "border-black border-2"
+                      : "border-[#E4E4E7]"
+                  }`}
+                >
+                  <img
+                    src={image}
+                    alt={`${service?.name} ${index + 1}`}
+                    className="w-full h-full object-cover"
+                  />
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
         <div>
           <div className="flex  flex-col ">
             <div className="flex items-center justify-between">
