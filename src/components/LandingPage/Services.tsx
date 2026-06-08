@@ -2,16 +2,14 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
 import type { IService } from "@/lib/interfaces/interface";
 
-
-interface ServiceProps{
-  Services:IService[],
-  loading:boolean
+interface ServiceProps {
+  Services: IService[];
+  loading: boolean;
 }
-function Services({Services,loading}:ServiceProps) {
+function Services({ Services, loading }: ServiceProps) {
   const navigate = useNavigate();
   const location = useLocation();
   const { pathname } = location;
-
 
   const HandleClick = (id: number) => {
     navigate(`/service/${id}`);
@@ -43,14 +41,26 @@ function Services({Services,loading}:ServiceProps) {
               className="rounded-[20px] border cursor-pointer border-[#E4E4E7] bg-[#FAFAFA] p-3"
               key={index}
             >
-              <div className="md:h-[263px] w-full rounded-md overflow-hidden">
+              <div className="md:h-[220px] w-full rounded-md overflow-hidden">
                 <img
-                  src={service.image}
+                  src={service.images?.[0]}
                   alt={service.name}
-                  style={{ objectPosition: "center 30%" }}
-                  className="w-full h-full object-cover object-top-left"
+                  className="w-full h-full object-cover"
                 />
               </div>
+
+              {service.images?.length > 1 && (
+                <div className="flex gap-2 mt-2">
+                  {service.images.slice(1, 4).map((img, idx) => (
+                    <img
+                      key={idx}
+                      src={img}
+                      alt=""
+                      className="w-14 h-14 rounded-md object-cover"
+                    />
+                  ))}
+                </div>
+              )}
               <p className="font-bold text-[#18181B] mt-4">{service.name}</p>
               <p className="text-[#71717A] font-normal text-lg line-clamp-2">
                 {service.description}

@@ -50,7 +50,9 @@ export interface IAvailableDay{
 export interface IService {
   id?: number;
   name: string;
-  image: string;
+  image?: string;
+    images: string[];
+
   status: string;
   description: string;
   variants?: number[];
