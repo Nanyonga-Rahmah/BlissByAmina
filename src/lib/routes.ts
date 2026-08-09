@@ -15,7 +15,10 @@ export const AllAvailableDays=()=>`${import.meta.env.VITE_BACKEND_URL}/available
 
 export const AllCities=()=>`${import.meta.env.VITE_BACKEND_URL}/cities`
 
-export const AllServices=()=>`${import.meta.env.VITE_BACKEND_URL}/services`
+export const AllServices=()=>`${import.meta.env.VITE_BACKEND_URL}/activeServices`
+
+export const AllRemovalServices=()=>`${import.meta.env.VITE_BACKEND_URL}/getRemovalServices`
+
 
 export const MakePayment=()=>`${import.meta.env.VITE_BACKEND_URL}/payments/charge`
 

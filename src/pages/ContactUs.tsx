@@ -1,6 +1,11 @@
 import Footer from "@/components/Footer";
 import Navigation from "@/components/header";
-import { Call02Icon, Mail01Icon } from "@hugeicons/core-free-icons";
+import {
+  Call02Icon,
+  InstagramIcon,
+  Mail01Icon,
+  TiktokIcon,
+} from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 
 function ContactUs() {
@@ -60,6 +65,22 @@ function ContactUs() {
               <HugeiconsIcon icon={Mail01Icon} color="#ffffff" />
             </div>
             <span className="text-[#52525B]">Boxbraidsamina4@gmail.com</span>
+          </div>
+          <div className="border border-[#A1A1AA] h-[34px]"></div>
+
+          <div className="flex items-center gap-2">
+            <div className="flex items-center rounded-full p-2 bg-[#18181B]">
+              <HugeiconsIcon icon={TiktokIcon} color="#ffffff" />
+            </div>
+            <a href="" className="text-[#52525B]">BraidedBliss_amina</a>
+          </div>
+
+          <div className="border border-[#A1A1AA] h-[34px]"></div>
+          <div className="flex items-center gap-2">
+            <div className="flex items-center rounded-full p-2 bg-[#18181B]">
+              <HugeiconsIcon icon={InstagramIcon} color="#ffffff" />
+            </div>
+            <a href="" className="text-[#52525B]">BraidedBliss_amina</a>
           </div>
         </div>
       </div>

@@ -12,7 +12,7 @@ import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { CreateBooking, MakePayment } from "@/lib/routes";
-import type {  IService, IVariant } from "@/lib/interfaces/interface";
+import type { IService, IVariant } from "@/lib/interfaces/interface";
 import {
   getAuthUser,
   getUserToken,
@@ -30,11 +30,16 @@ interface CardDetailsFormProps {
   setFailure: React.Dispatch<React.SetStateAction<boolean>>;
   selectedVariant?: IVariant | null;
   selectedCity?: CityOption | null;
+  hasRemovalAddOn: boolean;
+  removalDetailsLength: string;
+  removalDetailsPrice: string;
+  removalDetailsSize: string;
   selectedDate?: Date | null;
   selectedTime?: string | null;
   service?: IService | null;
   totalFee?: number;
   handleNext: () => void;
+  handleBack: () => void;
 }
 export function CardDetailsForm({
   setSuccess,
@@ -46,6 +51,11 @@ export function CardDetailsForm({
   selectedVariant,
   handleNext,
   totalFee,
+  hasRemovalAddOn,
+  removalDetailsLength,
+  removalDetailsPrice,
+  removalDetailsSize,
+  handleBack,
 }: CardDetailsFormProps) {
   const token = getUserToken();
   const stripe = useStripe();
@@ -63,15 +73,16 @@ export function CardDetailsForm({
     bookingDay: selectedDate?.toISOString().split("T")[0],
     bookingTime: selectedTime,
     isCanceled: false,
-
+    hasRemovalAddOn: hasRemovalAddOn,
+    removalDetailsLength: removalDetailsLength,
+    removalDetailsSize: removalDetailsSize,
+    removalDetailsPrice: removalDetailsPrice,
     userId: isAuthenticated() ? getAuthUser()?.id : null,
     length: selectedVariant?.length ?? "",
     city: selectedCity?.name ?? "",
     travelfee: selectedCity?.travelFee ?? 0,
     servicefee: String(selectedVariant?.price ?? 0),
-    amount:
-      Number(selectedVariant?.price ?? 0) +
-      Number(selectedCity?.travelFee ?? 0),
+    amount: totalFee,
     size: selectedVariant?.name ?? "",
   };
 
@@ -236,7 +247,7 @@ export function CardDetailsForm({
           <Button
             variant="outline"
             className="rounded-full  bg-[#F4F4F5]  border-none text-base"
-            // onClick={handleBack}
+            onClick={handleBack}
           >
             Back
           </Button>

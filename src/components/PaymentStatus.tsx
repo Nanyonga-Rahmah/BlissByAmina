@@ -1,6 +1,7 @@
 import type { IService, IVariant } from "@/lib/interfaces/interface";
 import type { CityOption } from "./BookingDialog";
 import { Button } from "./ui/button";
+import { format } from "date-fns";
 
 interface PaymentStatusProps {
   success?: boolean;
@@ -19,6 +20,8 @@ function PaymentStatus({
   selectedCity,
   selectedVariant,
   service,
+  selectedDate,
+  selectedTime,
   address,
 }: PaymentStatusProps) {
   // const [paymentStatus] = useState<
@@ -63,7 +66,9 @@ function PaymentStatus({
             <div className="flex items-center justify-between">
               <span className="text-[#71717A] text-[15px]">Amount</span>
               <div className="flex flex-col">
-                <span className="font-bold">1,800 SEK</span>
+                <span className="font-bold">
+                  {totalFee?.toLocaleString()} SEK
+                </span>
                 <span className="text-[#A1A1AA]">incl. 25% VAT</span>
               </div>
             </div>
@@ -77,7 +82,8 @@ function PaymentStatus({
             <div className="flex items-center justify-between">
               <span className="text-[#71717A] text-[15px]">Service date</span>
               <span className="text-[#18181B] text-[15px]">
-                12 Nov, 2026 | 03:00am
+                {selectedDate ? format(selectedDate, "dd MMM, yyyy") : ""} |{" "}
+                {selectedTime ?? ""}{" "}
               </span>
             </div>
 

@@ -51,7 +51,7 @@ export function ViewBookingDialog() {
             className="cursor-pointer"
           />
         </DialogTrigger>
-        <DialogContent className="w-[500px] right-[.2%]">
+        <DialogContent className="w-[500px] max-h-[700px] overflow-y-auto right-[.2%]">
           <DialogHeader>
             <DialogTitle>Booking Details</DialogTitle>
 
