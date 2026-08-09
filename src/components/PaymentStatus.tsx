@@ -90,8 +90,10 @@ function PaymentStatus({
             <div className="flex items-center justify-between">
               <span className="text-[#71717A] text-[15px]">Booking date</span>
               <span className="text-[#18181B] text-[15px]">
-                12 Nov, 2026 | 03:00am
+                {selectedDate ? format(selectedDate, "dd MMM, yyyy") : ""} |{" "}
+                {selectedTime ?? ""}{" "}
               </span>
+
             </div>
 
             <div className="flex items-center justify-between">

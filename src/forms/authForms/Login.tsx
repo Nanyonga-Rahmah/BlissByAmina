@@ -66,7 +66,6 @@ export function LoginForm({ onForgotPassword, onClose }: LoginFormProps) {
       } else {
         toast.error(userResponse.message);
       }
-      console.log(response);
     } catch (error) {
     } finally {
       setSubmitting(false);

@@ -19,6 +19,7 @@ import {
   isAuthenticated,
 } from "@/lib/cookies/User-Management";
 import type { CityOption } from "@/components/BookingDialog";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   fullName: z.string().min(2),
@@ -68,6 +69,7 @@ export function CardDetailsForm({
     },
   });
 
+  const customerName = `${getAuthUser()?.firstName} ${getAuthUser()?.lastName}`;
   const bookingToSave = {
     serviceName: service?.name ?? "",
     bookingDay: selectedDate?.toISOString().split("T")[0],
@@ -134,16 +136,20 @@ export function CardDetailsForm({
         body: JSON.stringify({
           paymentMethodId: paymentMethod.id,
           amount: Number(totalFee),
+          customerName: customerName,
+          city: selectedCity?.name,
         }),
       });
 
-      if (!response.ok) {
-        throw new Error("Payment failed");
-      }
-
       const result = await response.json();
 
-      if (result.success) {
+      if (!response.ok) {
+        toast.error(result.message);
+      }
+
+
+
+      if (response.ok) {
         setSuccess(true);
         createBooking();
 
