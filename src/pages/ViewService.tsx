@@ -91,6 +91,7 @@ function ViewService() {
         .filter(Boolean),
     ),
   ];
+
   const serviceImages =
     service?.images && service.images.length > 0
       ? service.images
