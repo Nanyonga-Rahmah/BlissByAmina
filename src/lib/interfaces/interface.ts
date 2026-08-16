@@ -66,3 +66,27 @@ export interface IVariant {
   status: string;
   serviceId:number;
 }
+
+
+export interface IProduct {
+  id?: number;
+  name: string;
+
+  images: string[];
+  status: string;
+  description: string;
+
+  variants?: number[];
+  createdAt: Date;
+}
+export interface IProductVariant {
+  id?: number;
+  color: string;
+  type: string;
+  size: string;
+  quantity: number;
+  price: number;
+  status: string;
+  productId: number;
+  images: string[];
+}

@@ -30,9 +30,9 @@ function ViewService() {
   const serviceId = Number(id);
 
   const { services, loading } = useServices();
-  const filteredServices = services.filter(
+  const filteredServices = services?.filter(
     (service) => service.id !== serviceId,
-  );
+  )??[];
 
   useEffect(() => {
     const authStatus = isAuthenticated();
@@ -42,7 +42,7 @@ function ViewService() {
   const { service } = useService({ serviceId });
   const { variants } = useVariants({ serviceId });
 
-  const removalService = services.find((service) =>
+  const removalService = services?.find((service) =>
     service.name.toLowerCase().includes("removal"),
   );
 
@@ -126,7 +126,7 @@ function ViewService() {
               <img
                 src={activeImage}
                 alt={service?.name}
-                style={{ objectPosition: "center 40%" }}
+                style={{ objectPosition: "center 50% " }}
                 className="w-full h-full object-cover object-center"
               />
             )}
@@ -306,7 +306,9 @@ function ViewService() {
       </div>
 
       <div>
-        <Services Services={filteredServices} loading={loading} />
+        {Services && (
+          <Services Services={filteredServices} loading={loading} />
+        )}{" "}
       </div>
     </section>
   );

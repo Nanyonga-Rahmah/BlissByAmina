@@ -27,3 +27,16 @@ export const CreateBooking=()=>`${import.meta.env.VITE_BACKEND_URL}/createBookin
 export const UserBookings=(userId:number)=>`${import.meta.env.VITE_BACKEND_URL}/bookings/user/${userId}`
 
 export const CancelBooking=(bookingId:number)=>`${import.meta.env.VITE_BACKEND_URL}/bookings/cancel/${bookingId}`
+
+
+export const DeleteProduct=(id:number)=>`${import.meta.env.VITE_BACKEND_URL}/products/${id}`
+
+export const UpdateProduct=(id:number)=>`${import.meta.env.VITE_BACKEND_URL}/products/${id}`
+
+export const CreateProductVariant=()=>`${import.meta.env.VITE_BACKEND_URL}/createProductVariant`
+
+export const CreateProduct=()=>`${import.meta.env.VITE_BACKEND_URL}/createProduct`
+
+export const AllProducts=()=>`${import.meta.env.VITE_BACKEND_URL}/activeproducts`
+
+export const FetchProduct=(id:number)=>`${import.meta.env.VITE_BACKEND_URL}/products/${id}`
