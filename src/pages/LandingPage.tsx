@@ -7,17 +7,23 @@ import Footer from "@/components/Footer";
 import Question from "@/components/LandingPage/Question";
 import Quote from "@/components/LandingPage/Quote";
 import { useServices } from "@/lib/hooks/use-services";
+import Accessories from "@/components/LandingPage/HairAccesories";
+import { useProducts } from "@/lib/hooks/use-products";
 
 function LandingPage() {
   const { services, loading } = useServices();
+
+
+  const { products, loading: productsLoading } = useProducts();
+
+
 
   const [visibleCount, setVisibleCount] = useState(6);
   const loaderRef = useRef<HTMLDivElement | null>(null);
 
   const visibleServices = services?.slice(0, visibleCount) || [];
 
-  const hasMore = services?.length > visibleCount;
-
+  const hasMore = (services?.length ?? 0) > visibleCount;
   useEffect(() => {
     if (!hasMore) return;
 
@@ -37,8 +43,6 @@ function LandingPage() {
     return () => observer.disconnect();
   }, [hasMore, services]);
 
-  console.log(services);
-
   return (
     <div>
       <Navigation />
@@ -47,12 +51,13 @@ function LandingPage() {
 
       <Services Services={visibleServices} loading={loading} />
 
-      {/* 👇 scroll trigger */}
       {hasMore && (
         <div ref={loaderRef} className="h-10 flex justify-center items-center">
           <p className="text-gray-400 text-sm">Loading more...</p>
         </div>
       )}
+
+      <Accessories products={products} loading={productsLoading} />
 
       <Quote />
       <Question />
