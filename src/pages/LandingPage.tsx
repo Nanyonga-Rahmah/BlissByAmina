@@ -51,7 +51,6 @@ function LandingPage() {
 
       <Services Services={visibleServices} loading={loading} />
 
-      {/* 👇 scroll trigger */}
       {hasMore && (
         <div ref={loaderRef} className="h-10 flex justify-center items-center">
           <p className="text-gray-400 text-sm">Loading more...</p>
