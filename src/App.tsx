@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Toaster } from "./components/ui/sonner";
 import { prefetchServicesAndProducts } from "./lib/pre-fetch";
+import Settings from "./pages/SettingsPage";
 
 const LandingPage = lazy(() => import("./pages/LandingPage"));
 const VerifyEmailPage = lazy(() => import("./pages/VerifyEmailPage"));
@@ -47,6 +48,8 @@ function App() {
             <Route path="/booking" element={<BookingPolicyPage />} />
             <Route path="/terms" element={<TermsOfService />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/settings" element={<Settings />} />
+
             <Route path="/user-forbidden" element={<UserForbidden />} />
           </Routes>
         </Suspense>

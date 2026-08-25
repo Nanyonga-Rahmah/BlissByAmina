@@ -29,16 +29,15 @@ function Accessories({ products, loading }: AccesoryProps) {
         )}
         {products.map((product, index) => (
           <div className="relative">
-            <div
-              className="
-    absolute -top-4 left-1/2 -translate-x-1/2
-    w-4/5 bg-[#3F3F46] text-white
-    flex items-center justify-between
-    py-2 px-6"
-            >
-              <div className="h-2 w-2 bg-white rounded-full"></div>
-              {product.name}
-              <div className="h-2 w-2 bg-white rounded-full"></div>
+            <div className="absolute -top-4  left-1/2 -translate-x-1/2 w-4/5">
+              <div className="relative bg-[#3F3F46] text-white flex items-center justify-between gap-3 py-2 px-8">
+                <div className="h-1.5 w-1.5 bg-white rounded-full shrink-0" />
+                <span className="text-sm font-medium">{product.name}</span>
+                <div className="h-1.5 w-1.5 bg-white rounded-full shrink-0" />
+
+                <div className="absolute top-1/2 -left-2.5 -translate-y-1/2 h-5 w-5 bg-[#3F3F46] rounded-full" />
+                <div className="absolute top-1/2 -right-2.5 -translate-y-1/2 h-5 w-5 bg-[#3F3F46] rounded-full" />
+              </div>
             </div>
 
             <div
@@ -69,7 +68,10 @@ function Accessories({ products, loading }: AccesoryProps) {
                 <p className="text-[#71717A] font-normal text-lg mt-2">
                   {product.description}
                 </p>
-                {/* <p className="font-bold text-[#18181B] ">{product.price} SEK</p> */}
+                {product.price ? (
+                  <p className="font-bold text-[#18181B] ">{product.price?.toLocaleString()} SEK</p>
+
+                ):""}
               </div>
               <Button
                 className="rounded-4xl mt-3 w-[95%] cursor-pointer m-4 border-[#18181B]"

@@ -3,6 +3,7 @@ export interface IUser {
   lastName: string;
   firstName: string;
   password: string;
+  profilePhoto?:string;
   email: string;
   bookingIds?: number[];
   isVerified?: boolean;
@@ -71,6 +72,7 @@ export interface IVariant {
 export interface IProduct {
   id?: number;
   name: string;
+  price?:number;
 
   images: string[];
   status: string;
@@ -81,6 +83,8 @@ export interface IProduct {
 }
 export interface IProductVariant {
   id?: number;
+  name:string,
+  description:string,
   color: string;
   type: string;
   size: string;
