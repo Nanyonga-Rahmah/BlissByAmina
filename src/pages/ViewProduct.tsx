@@ -4,13 +4,12 @@ import { useProducts } from "@/lib/hooks/use-products";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Accessories from "@/components/LandingPage/HairAccesories";
-import { useProductVariants } from "@/lib/hooks/use-productVariant";
 import { Star } from "lucide-react";
 import { useProduct } from "@/lib/hooks/use-product";
 
 function ViewProduct() {
-  const [selectedSize, setSelectedSize] = useState<string | null>(null);
-  const [selectedLength, setSelectedLength] = useState<string | null>(null);
+  // const [selectedSize, setSelectedSize] = useState<string | null>(null);
+  // const [selectedLength, setSelectedLength] = useState<string | null>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [qty, setQty] = useState<number>(1);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
@@ -21,7 +20,7 @@ function ViewProduct() {
 
   const { products, loading } = useProducts();
   const { product } = useProduct({ productId });
-  const { variants } = useProductVariants({ productId });
+  // const { variants } = useProductVariants({ productId });
 
   const filteredProducts = products?.filter(
     (product) => product.id !== productId,
@@ -36,25 +35,12 @@ function ViewProduct() {
     setQty(1);
   }, [productId]);
 
-  const filteredVariants = (variants ?? []).filter(
-    (variant: any) => variant.status === "active",
-  );
+  
 
-  const selectedVariant = filteredVariants.find(
-    (variant: any) =>
-      variant.name === selectedSize && variant.length === selectedLength,
-  );
+ 
 
-  const sizes = [...new Set(filteredVariants.map((v: any) => v.name))];
 
-  const lengths = [
-    ...new Set(
-      filteredVariants
-        .filter((v: any) => v.name === selectedSize)
-        .map((v: any) => v.length)
-        .filter(Boolean),
-    ),
-  ];
+  
 
   const productImages =
     product?.images && product.images.length > 0
@@ -65,20 +51,19 @@ function ViewProduct() {
 
   const activeImage = selectedImage || product?.images[0];
 
-  const canAddToCart = Boolean(selectedSize && selectedLength && selectedVariant);
+  // const canAddToCart = Boolean(selectedSize && selectedLength);
 
-  const totalPrice = selectedVariant
-    ? (selectedVariant.price * qty).toLocaleString()
-    : null;
+
 
 //   const rating = product?.rating ?? 4;
 //   const reviewCount = product?.reviewCount ?? 0;
-  const stockLeft = 3;
+  const stockLeft = product?.quantity|| 1;
 
   const handleAddToCart = () => {
-    if (!canAddToCart) return;
     // TODO: wire up actual add-to-cart mutation/context
   };
+
+  console.log(product)
 
   return (
     <section>
@@ -129,7 +114,7 @@ function ViewProduct() {
                 {product?.name}
               </h3>
               {typeof stockLeft === "number" && stockLeft <= 5 && (
-                <span className="flex items-center gap-1 bg-red-500 text-white text-xs font-medium px-3 py-1 rounded-full whitespace-nowrap">
+                <span className="flex items-center gap-1 bg-[#DC2626] text-white text-[11px] font-medium px-3 py-1 rounded-full whitespace-nowrap">
                   ⚠ Only {stockLeft} left
                 </span>
               )}
@@ -157,59 +142,23 @@ function ViewProduct() {
             {product?.description}
           </p>
 
-          <div className="border-t border-[#E4E4E7] my-5" />
+          <div className="border-t border-[#E4E4E7] my-5 flex " />
+          <h4>Type</h4>
 
-          {sizes.length > 0 && (
-            <div className="mb-5">
-              <h4 className="font-bold mb-2">Type</h4>
-              <div className="flex flex-wrap">
-                {sizes.map((sizeOption, index) => (
-                  <button
-                    key={index}
-                    onClick={() => {
-                      setSelectedSize(sizeOption);
-                      setSelectedLength(null);
-                    }}
-                    className={`border px-4 py-2 mr-2 mb-2 capitalize cursor-pointer rounded-full transition-colors ${
-                      selectedSize === sizeOption
-                        ? "font-bold border-black"
-                        : "font-normal border-[#E4E4E7]"
-                    }`}
-                  >
-                    {sizeOption}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
+          <div className="border border-[#18181B] py-1 px-3 w-max rounded-full my-2">{product?.type}</div>
 
-          {selectedSize && lengths.length > 0 && (
-            <div className="mb-5">
-              <h4 className="font-bold mb-2">Size</h4>
-              <div className="flex flex-wrap">
-                {lengths.map((lengthOption, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setSelectedLength(lengthOption ?? "")}
-                    className={`border px-6 py-2 mr-2 mb-2 capitalize cursor-pointer rounded-full transition-colors ${
-                      selectedLength === lengthOption
-                        ? "font-bold border-black"
-                        : "font-normal border-[#E4E4E7]"
-                    }`}
-                  >
-                    {lengthOption}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
+          <h4>Size</h4>
+
+          <div className="border border-[#18181B] py-1 px-3 w-max rounded-full my-2" >{product?.size}</div>
+
+
 
           <div className="border-t border-[#E4E4E7] my-5" />
 
           <div className="flex items-center justify-between mb-5">
             <span className="text-[#18181B] font-medium text-xl">Amount</span>
             <span className="font-bold text-xl">
-              {totalPrice ? `${totalPrice} SEK` : "--"}
+              {product?.price ? `${product.price} SEK` : "--"}
             </span>
           </div>
 
@@ -228,6 +177,7 @@ function ViewProduct() {
               <button
                 type="button"
                 onClick={() => setQty((q) => q + 1)}
+                disabled={qty==product?.quantity}
                 className="text-lg leading-none cursor-pointer"
               >
                 +
@@ -237,8 +187,8 @@ function ViewProduct() {
             <button
               type="button"
               onClick={handleAddToCart}
-              disabled={!canAddToCart}
-              className="flex-1 bg-black text-white rounded-full py-3 font-medium tracking-wide uppercase text-sm disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+              // disabled={!canAddToCart}
+              className="w-max px-6 bg-black text-white rounded-full py-3 font-medium tracking-wide uppercase text-sm disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
             >
               Add to Cart
             </button>

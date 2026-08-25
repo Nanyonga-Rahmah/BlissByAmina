@@ -10,7 +10,7 @@ export function prefetchServicesAndProducts() {
       fetch(AllProducts()).then((r) => r.json()),
     ]).then(([servicesRes, productsRes]) => ({
       services: servicesRes.services, // unwrap { message, services } -> services[]
-      products: productsRes.products, // unwrap { message, products } -> products[]
+      products: productsRes.productVariants, // unwrap { message, products } -> products[]
     }));
   }
   return cache;
