@@ -167,11 +167,10 @@ export function BookingDialog({
         <DialogTrigger asChild>
           <Button
             disabled={disabled || !isLoggedIn}
-            className={`uppercase text-white rounded-full w-full text-[20px] py-7 ${
-              disabled || !isLoggedIn
+            className={`uppercase text-white rounded-full w-full text-[20px] py-7 ${disabled || !isLoggedIn
                 ? "opacity-50 cursor-not-allowed"
                 : "cursor-pointer"
-            } `}
+              } `}
           >
             Continue to Book
           </Button>
@@ -332,11 +331,10 @@ export function BookingDialog({
                           type="button"
                           onClick={() => setSelectedTime(label)}
                           className={`border px-4 py-2 m-2 bg-[#FAFAFA] rounded-full
-            ${
-              selectedTime === label
-                ? "font-bold border-black"
-                : "border-[#E4E4E7]"
-            }
+            ${selectedTime === label
+                              ? "font-bold border-black"
+                              : "border-[#E4E4E7]"
+                            }
           `}
                         >
                           {label}
@@ -361,6 +359,7 @@ export function BookingDialog({
               />
             </div>
           )}
+
 
           {currentStep === 3 && (
             <div className="grid gap-4 ">

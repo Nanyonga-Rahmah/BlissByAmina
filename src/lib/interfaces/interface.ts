@@ -5,11 +5,22 @@ export interface IUser {
   password: string;
   profilePhoto?:string;
   email: string;
+  cartId:number;
   bookingIds?: number[];
   isVerified?: boolean;
   createdAt: Date;
 }
+export interface ICartItem {
+  productVariantId: number;
+  quantity: number;
+  product:IProductVariant
+}
 
+export interface ICart {
+  id?: number;
+  userId: number;
+  products: ICartItem[];
+}
 export interface IBooking {
   id?: number;
   serviceName: string;

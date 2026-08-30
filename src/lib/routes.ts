@@ -46,3 +46,9 @@ export const AllProducts=()=>`${import.meta.env.VITE_BACKEND_URL}/allProductVari
 export const FetchProduct=(id:number)=>`${import.meta.env.VITE_BACKEND_URL}/products/${id}`
 
 export const FetchProductVariant=(id:number)=>`${import.meta.env.VITE_BACKEND_URL}/products/variants/${id}`
+
+export const AddToCart=()=>`${import.meta.env.VITE_BACKEND_URL}/addToCart`
+
+export const FetchUser=(userId:number|undefined)=>`${import.meta.env.VITE_BACKEND_URL}/users/${userId}`
+
+export const FetchCart=(userId:number)=>`${import.meta.env.VITE_BACKEND_URL}/${userId}`
