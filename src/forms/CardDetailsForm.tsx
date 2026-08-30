@@ -31,10 +31,10 @@ interface CardDetailsFormProps {
   setFailure: React.Dispatch<React.SetStateAction<boolean>>;
   selectedVariant?: IVariant | null;
   selectedCity?: CityOption | null;
-  hasRemovalAddOn: boolean;
-  removalDetailsLength: string;
-  removalDetailsPrice: string;
-  removalDetailsSize: string;
+  hasRemovalAddOn?: boolean;
+  removalDetailsLength?: string;
+  removalDetailsPrice?: string;
+  removalDetailsSize?: string;
   selectedDate?: Date | null;
   selectedTime?: string | null;
   service?: IService | null;

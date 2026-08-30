@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { getUserToken } from "../cookies/User-Management";
 import {  FetchProductVariant } from "../routes";
 import type {  IProductVariant } from "../interfaces/interface";
 
@@ -17,17 +16,12 @@ export const useProduct = ({ productId }: useProductProps) => {
       setError(null);
 
       try {
-        const token = getUserToken();
-
-        if (!token) {
-          throw new Error("No authentication token found");
-        }
+      
 
         const response = await fetch(FetchProductVariant(productId), {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            authorization: `Bearer ${token}`,
           },
         });
 

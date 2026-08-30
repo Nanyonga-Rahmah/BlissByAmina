@@ -1,11 +1,13 @@
 import Navigation from "@/components/header";
-import { getUserToken, isAuthenticated } from "@/lib/cookies/User-Management";
+import { getAuthUser, getUserToken, isAuthenticated } from "@/lib/cookies/User-Management";
 import { useProducts } from "@/lib/hooks/use-products";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Accessories from "@/components/LandingPage/HairAccesories";
 import { Star } from "lucide-react";
 import { useProduct } from "@/lib/hooks/use-product";
+import { AddToCart } from "@/lib/routes";
+import { toast } from "sonner";
 
 function ViewProduct() {
   // const [selectedSize, setSelectedSize] = useState<string | null>(null);
@@ -13,6 +15,7 @@ function ViewProduct() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [qty, setQty] = useState<number>(1);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [ ,setAddingToCart] = useState<boolean>(false);
 
   const { id } = useParams();
   const token = getUserToken();
@@ -24,7 +27,7 @@ function ViewProduct() {
 
   const filteredProducts = products?.filter(
     (product) => product.id !== productId,
-  )??[];
+  ) ?? [];
   useEffect(() => {
     const authStatus = isAuthenticated();
     setIsLoggedIn(authStatus);
@@ -35,12 +38,12 @@ function ViewProduct() {
     setQty(1);
   }, [productId]);
 
-  
-
- 
 
 
-  
+
+
+
+
 
   const productImages =
     product?.images && product.images.length > 0
@@ -55,15 +58,84 @@ function ViewProduct() {
 
 
 
-//   const rating = product?.rating ?? 4;
-//   const reviewCount = product?.reviewCount ?? 0;
-  const stockLeft = product?.quantity|| 1;
+  //   const rating = product?.rating ?? 4;
+  //   const reviewCount = product?.reviewCount ?? 0;
+  const stockLeft = product?.quantity || 1;
 
-  const handleAddToCart = () => {
-    // TODO: wire up actual add-to-cart mutation/context
+  const handleAddToCart = async () => {
+    if (!isLoggedIn) {
+      alert("Please log in to add products to your cart.");
+      return;
+    }
+
+    if (!product?.id) {
+      alert("Product not found.");
+      return;
+    }
+
+    if (qty <= 0) {
+      alert("Quantity must be greater than 0.");
+      return;
+    }
+
+    if (product.quantity !== undefined && qty > product.quantity) {
+      alert("Not enough stock available.");
+      return;
+    }
+
+    const userInfo = getAuthUser()
+    const userId = userInfo?.id;
+
+    if (!userId) {
+      alert("User information not found. Please log in again.");
+      return;
+    }
+
+    try {
+      setAddingToCart(true);
+
+      const response = await fetch(
+        AddToCart(),
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            productVariantId: product.id,
+            userId: Number(userId),
+            quantity: qty,
+          }),
+        },
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => null);
+
+        throw new Error(
+          errorData?.message || "Failed to add product to cart",
+        );
+      }
+
+      // const cart = await response.json();
+
+      toast.success("Product added to cart successfully!");
+
+    } catch (error) {
+      toast.error("Add to cart error:")
+        ;
+
+      alert(
+        error instanceof Error
+          ? error.message
+          : "Failed to add product to cart",
+      );
+    } finally {
+      setAddingToCart(false);
+    }
   };
 
-  console.log(product)
 
   return (
     <section>
@@ -89,11 +161,10 @@ function ViewProduct() {
                   key={index}
                   type="button"
                   onClick={() => setSelectedImage(image)}
-                  className={`h-24 rounded-md overflow-hidden border cursor-pointer ${
-                    activeImage === image
-                      ? "border-black border-2"
-                      : "border-[#E4E4E7]"
-                  }`}
+                  className={`h-24 rounded-md overflow-hidden border cursor-pointer ${activeImage === image
+                    ? "border-black border-2"
+                    : "border-[#E4E4E7]"
+                    }`}
                 >
                   <img
                     src={image}
@@ -177,7 +248,7 @@ function ViewProduct() {
               <button
                 type="button"
                 onClick={() => setQty((q) => q + 1)}
-                disabled={qty==product?.quantity}
+                disabled={qty == product?.quantity}
                 className="text-lg leading-none cursor-pointer"
               >
                 +
