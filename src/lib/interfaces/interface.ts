@@ -15,6 +15,22 @@ export interface ICartItem {
   quantity: number;
   product:IProductVariant
 }
+export interface IDiscount {
+  id?: number;
+  name: string;
+  code: string;
+  status: string;
+  limit: number;
+  value: string;
+  usage?: number;
+  appliesTo: string;
+  startDate: string;
+  endDate: string;
+  minOrderValue: number,
+  createdAt: Date,
+  perCustomerLimit: number,
+  category: string
+}
 
 export interface ICart {
   id?: number;
