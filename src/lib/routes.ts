@@ -52,3 +52,5 @@ export const AddToCart=()=>`${import.meta.env.VITE_BACKEND_URL}/addToCart`
 export const FetchUser=(userId:number|undefined)=>`${import.meta.env.VITE_BACKEND_URL}/users/${userId}`
 
 export const FetchCart=(userId:number)=>`${import.meta.env.VITE_BACKEND_URL}/${userId}`
+
+export const GetDiscountByCode=(code:string)=>`${import.meta.env.VITE_BACKEND_URL}/discountCode/${code}`

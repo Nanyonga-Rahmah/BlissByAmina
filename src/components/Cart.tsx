@@ -15,7 +15,12 @@ import { OrderDetailsForm } from "@/forms/OrderDetailsForm";
 import { useUserCart } from "@/lib/hooks/use-cart";
 import { ShoppingCart, X } from "lucide-react";
 import { useEffect, useState } from "react";
-// import { CardDetailsForm } from "@/forms/CardDetailsForm";
+import { GetDiscountByCode } from "@/lib/routes";
+import type { IDiscount } from "@/lib/interfaces/interface";
+import { CardDetailsForm } from "@/forms/CardDetailsForm";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+
 
 interface CartProps {
     isLogggedIn: boolean;
@@ -34,7 +39,13 @@ export function CartDialog({
 
     // Keep quantity for each product separately
     const [quantities, setQuantities] = useState<Record<number, number>>({});
+    const [discountCode, setDiscountCode] = useState("");
+    const [discount, setDiscount] = useState<IDiscount | null>();
+    const [, setSuccess] = useState(false)
+    const [, setFailure] = useState(false)
+    const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
+    const [error, setError] = useState("");
     const [currentStep, setCurrentStep] = useState<number>(1)
     const [, setIsUserFormValid] = useState(false);
     const [userDetails, setUserDetails] = useState({
@@ -54,6 +65,28 @@ export function CartDialog({
     const HandlePrevious = () => {
         setCurrentStep(currentStep - 1)
     }
+    const applyDiscount = async () => {
+        if (!discountCode.trim()) return;
+
+        try {
+            setError("");
+
+            const response = await fetch(
+                GetDiscountByCode(discountCode.trim())
+            );
+
+            if (!response.ok) {
+                throw new Error("Invalid discount code");
+            }
+
+            const data = await response.json();
+
+            setDiscount(data.discount);
+        } catch (error) {
+            setDiscount(null);
+            setError("Invalid or expired discount code");
+        }
+    };
     // Set the initial quantity from the quantity stored in the cart
     useEffect(() => {
         if (!cart?.products) return;
@@ -93,6 +126,13 @@ export function CartDialog({
             return sum + item.product.price * quantity;
         }, 0) ?? 0;
 
+
+    const taxAmount = 0.25 * total
+    const shippingFee = 3000
+    // const discountValue = discount?.value
+
+
+    const TotalFee=(total)+taxAmount+shippingFee
     return (
         <Sheet>
             <SheetTrigger asChild>
@@ -368,6 +408,7 @@ export function CartDialog({
                                     <button
                                         type="button"
                                         onClick={HandleNext}
+                                        disabled={!userDetails}
                                         className="w-full bg-[#18181B] justify-self-end text-white rounded-full py-3  font-medium"
                                     >
                                         Pay Now
@@ -477,21 +518,42 @@ export function CartDialog({
                                     </Accordion>
                                 </div>
 
-                                {/* <div>
-                                    <CardDetailsForm
-                                        handleNext={HandleNext}
-                                        handleBack={HandlePrevious}
 
-                                    />
-                                </div> */}
 
                                 <div>
                                     <h4 className="text-[#18181B] text-lg font-bold">Order Summary</h4>
 
                                     <div className="flex items-center justify-between gap-10">
-                                        <input type="text" name="discount" id="discount" className="border py-1 px-1 border-[#E4E4E7] flex-grow rounded-md" />
-                                        <button className="border border-[#18181B] rounded-full px-3 py-2">Apply</button>
+                                        <input
+                                            type="text"
+                                            name="discount"
+                                            id="discount"
+                                            value={discountCode}
+                                            onChange={(e) => setDiscountCode(e.target.value)}
+                                            className="border py-1 px-1 border-[#E4E4E7] flex-grow rounded-md"
+                                            placeholder="Discount code"
+                                        />
+
+                                        <button
+                                            type="button"
+                                            onClick={applyDiscount}
+                                            className="border border-[#18181B] rounded-full px-3 py-2"
+                                        >
+                                            Apply
+                                        </button>
                                     </div>
+
+                                    {error && (
+                                        <p className="text-sm text-red-500 mt-2">
+                                            {error}
+                                        </p>
+                                    )}
+
+                                    {discount && (
+                                        <p className="text-sm text-green-600 mt-2">
+                                            Discount applied: {discount.code}
+                                        </p>
+                                    )}
 
                                     <div className="flex flex-col gap-2 mt-4">
                                         <div className="flex justify-between items-center">
@@ -502,33 +564,32 @@ export function CartDialog({
                                             <span>Taxes (25%)</span>
                                             <span>{(0.25 * total).toLocaleString()} SEK</span>
                                         </div>
-                                        <div className="flex justify-between items-center">
+                                        {discount && (<div className="flex justify-between items-center">
                                             <span>Discount</span>
-                                            <span></span>
-                                        </div>
+                                            <span>{discount.value}</span>
+                                        </div>)}
                                         <div className="flex justify-between items-center">
                                             <span>Shipping costs</span>
                                             <span>{3000} SEK</span>
                                         </div>
+
+                                        <div className="flex justify-between items-center border-t border-[#E4E4E7] py-3">
+                                            <span>Total</span>
+                                            <span className="font-bold">{TotalFee}SEK</span>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div className="flex justify-between gap-10 items-center mt-28">
-                                    <button
-                                        type="button"
-                                        onClick={HandlePrevious}
-                                        className="w-full bg-[#F4F4F5] text-[#09090B] justify-self-end  rounded-full py-3  font-medium"
-                                    >
-                                        Back
-                                    </button>
-                                    <button
-                                        type="button"
-                                        onClick={HandleNext}
-                                        className="w-full bg-[#18181B] justify-self-end text-white rounded-full py-3  font-medium"
-                                    >
-                                        Pay Now
-                                    </button>
-                                </div>
+                                <Elements stripe={stripePromise}>
+                                    <CardDetailsForm
+                                    totalFee={TotalFee}
+                                        handleNext={HandleNext}
+                                        handleBack={HandlePrevious}
+                                        setSuccess={setSuccess}
+                                        setFailure={setFailure}
+
+                                    />
+                                </Elements>
 
                             </div>
                         )}
