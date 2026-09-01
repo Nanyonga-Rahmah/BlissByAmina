@@ -20,6 +20,7 @@ import type { IDiscount } from "@/lib/interfaces/interface";
 import { CardDetailsForm } from "@/forms/CardDetailsForm";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
+import { OrderPaymentForm } from "@/forms/OrderPaymentForm";
 
 
 interface CartProps {
@@ -55,6 +56,8 @@ export function CartDialog({
         email: "",
         address: "",
         notes: "",
+        city:"",
+        country:""
     });
 
     const HandleNext = () => {
@@ -132,7 +135,7 @@ export function CartDialog({
     // const discountValue = discount?.value
 
 
-    const TotalFee=(total)+taxAmount+shippingFee
+    const TotalFee = (total) + taxAmount + shippingFee
     return (
         <Sheet>
             <SheetTrigger asChild>
@@ -581,8 +584,9 @@ export function CartDialog({
                                 </div>
 
                                 <Elements stripe={stripePromise}>
-                                    <CardDetailsForm
-                                    totalFee={TotalFee}
+                                    <OrderPaymentForm
+                                        totalFee={TotalFee}
+                                        selectedCity={userDetails.city}
                                         handleNext={HandleNext}
                                         handleBack={HandlePrevious}
                                         setSuccess={setSuccess}

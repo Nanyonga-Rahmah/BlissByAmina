@@ -45,6 +45,8 @@ interface SignUpProps {
             phoneNumber: string;
             email: string;
             address: string;
+            city:string;
+            country:string;
             notes: string;
         }>
     >;
@@ -56,6 +58,8 @@ interface SignUpProps {
         phoneNumber: string;
         email: string;
         address: string;
+        city:string;
+        country:string;
         notes: string;
     };
 }
@@ -90,6 +94,8 @@ export function OrderDetailsForm({
                 email: user_email ?? "",
                 address: values.address ?? "",
                 notes: values.notes ?? "",
+                city: values.city ?? "",
+                country: values.country ?? "",
             });
         });
 
