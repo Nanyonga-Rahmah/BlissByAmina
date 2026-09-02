@@ -18,11 +18,10 @@ import {
   getUserToken,
   isAuthenticated,
 } from "@/lib/cookies/User-Management";
-import type { CityOption } from "@/components/BookingDialog";
 import { toast } from "sonner";
 
 const formSchema = z.object({
-  fullName: z.string().min(2),
+  fullName: z.string().min(2, "Name is required"),
   amount: z.string().min(1),
 });
 
@@ -60,8 +59,6 @@ export function OrderPaymentForm({
   selectedDate,
   shippingFee,
   products = [],
-  quantities = {},
-  selectedVariant,
   handleNext,
   totalFee,
   handleBack,
@@ -83,62 +80,59 @@ export function OrderPaymentForm({
     ? `${authUser.firstName ?? ""} ${authUser.lastName ?? ""}`.trim()
     : "Guest";
 
-  // Format array of products or fall back to a single label summary
  
 
-  const totalQuantity = products.length > 0
-    ? products.reduce((acc, item) => {
-        const qty = quantities[item.productVariantId] ?? item.quantity ?? 1;
-        return acc + qty;
-      }, 0)
-    : 1;
+  // Helper function to create order
+  const createOrderRequest = async (paymentIdVal: string = "") => {
+    const orderToCreate = {
+      products,
+      customerName,
+      userId: isAuthenticated() ? authUser?.id : null,
 
-  const orderToCreate = {
-    products,
-    customerName,
-    userId: isAuthenticated() ? authUser?.id : null,
-    quantity: totalQuantity,
-    type: products?.[0]?.product?.type ?? "",
-    city: selectedCity ?? "",
-    amount: totalFee ?? 0,
-    deliveryDate: selectedDate ? selectedDate.toISOString() : new Date().toISOString(),
-    address: selectedCity ?? "",
-    paymentStatus: "paid",
-    shippingFee: shippingFee,
-    size: selectedVariant?.name ?? "",
-    isCanceled: false,
-    status: "pending",
-  };
 
-  const createOrder = async () => {
-    try {
-      const response = await fetch(CreateOrder(), {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(orderToCreate),
-      });
+      city: selectedCity ?? "",
+      amount: totalFee ?? 0,
+      deliveryDate: selectedDate
+        ? selectedDate.toISOString()
+        : new Date().toISOString(),
+      address: selectedCity ?? "",
+      paymentStatus: paymentIdVal ? "paid" : "pending",
+      shippingFee: shippingFee,
 
-      if (!response.ok) {
-        throw new Error("Failed to create order");
-      }
+      isCanceled: false,
+      status: "pending",
+      paymentId: paymentIdVal,
+    };
 
-      setSuccess(true);
-    } catch (err) {
-      setFailure(true);
+    const response = await fetch(CreateOrder(), {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(orderToCreate),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to create order");
     }
+
+    return await response.json();
   };
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     setSubmitting(true);
+
     try {
       if (!stripe || !elements) return;
 
       const cardElement = elements.getElement(CardElement);
       if (!cardElement) return;
 
+      // STEP 1: Create Order First
+      const createdOrder = await createOrderRequest();
+
+      // STEP 2: Create Stripe Payment Method
       const { error, paymentMethod } = await stripe.createPaymentMethod({
         type: "card",
         card: cardElement,
@@ -153,6 +147,7 @@ export function OrderPaymentForm({
         return;
       }
 
+      // STEP 3: Process Payment
       const response = await fetch(MakePayment(), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -161,24 +156,27 @@ export function OrderPaymentForm({
           amount: Number(totalFee),
           customerName,
           city: selectedCity ?? "",
+          orderId: createdOrder?.id ?? createdOrder?._id, // Pass order context if server requires it
         }),
       });
 
       const result = await response.json();
 
       if (!response.ok) {
-        toast.error(result.message);
+        toast.error(result.message || "Payment failed");
         setFailure(true);
         return;
       }
 
-      await createOrder();
       setSuccess(true);
 
       setTimeout(() => {
         handleNext();
       }, 2000);
     } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "An unknown error occurred"
+      );
       setFailure(true);
     } finally {
       setSubmitting(false);
@@ -191,58 +189,7 @@ export function OrderPaymentForm({
         onSubmit={form.handleSubmit(onSubmit)}
         className="grid md:grid-cols-2 gap-4 my-4"
       >
-        {/* Render product list summary if products array exists */}
-        {products && products.length > 0 && (
-          <div className="col-span-2 space-y-3 mb-2">
-            <h4 className="font-semibold text-sm text-muted-foreground">
-              Order Summary ({products.length} {products.length === 1 ? "item" : "items"})
-            </h4>
-            {products.map((item) => {
-              const quantity = quantities[item.productVariantId] ?? item.quantity ?? 1;
-              const product = item.product || item;
-
-              return (
-                <div
-                  key={item.productVariantId || product.name}
-                  className="py-3 border-b border-[#E4E4E7] border-dashed last-of-type:border-b-0"
-                >
-                  <div className="flex gap-4">
-                    <div className="rounded-xl h-20 w-20 overflow-hidden shrink-0 bg-muted">
-                      <img
-                        src={product.images?.[0]}
-                        alt={product.name}
-                        className="object-cover h-full w-full"
-                      />
-                    </div>
-
-                    <div className="flex-1 min-w-0">
-                      <div className="flex justify-between gap-2">
-                        <div>
-                          <h3 className="font-semibold text-base">{product.name}</h3>
-                          {product.description && (
-                            <p className="text-sm text-muted-foreground mt-1 line-clamp-1">
-                              {product.description}
-                            </p>
-                          )}
-                        </div>
-                      </div>
-
-                      <div className="flex justify-between items-center mt-2">
-                        <span className="text-sm text-muted-foreground">
-                          Qty: {quantity} × {product.price?.toLocaleString()} SEK
-                        </span>
-
-                        <span className="font-semibold text-sm">
-                          {((product.price ?? 0) * quantity).toLocaleString()} SEK
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
+        
 
         <FormField
           control={form.control}
@@ -337,7 +284,7 @@ export function OrderPaymentForm({
             className="rounded-full px-10 py-6 font-bold"
             disabled={submitting}
           >
-            {submitting ? "Initiating Payment" : "Pay Now"}
+            {submitting ? "Processing..." : "Pay Now"}
           </Button>
         </div>
       </form>

@@ -17,10 +17,10 @@ import { ShoppingCart, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { GetDiscountByCode } from "@/lib/routes";
 import type { IDiscount } from "@/lib/interfaces/interface";
-import { CardDetailsForm } from "@/forms/CardDetailsForm";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import { OrderPaymentForm } from "@/forms/OrderPaymentForm";
+import PaymentStatus from "./PaymentStatus";
 
 
 interface CartProps {
@@ -42,8 +42,8 @@ export function CartDialog({
     const [quantities, setQuantities] = useState<Record<number, number>>({});
     const [discountCode, setDiscountCode] = useState("");
     const [discount, setDiscount] = useState<IDiscount | null>();
-    const [, setSuccess] = useState(false)
-    const [, setFailure] = useState(false)
+    const [success, setSuccess] = useState(false)
+    const [failure, setFailure] = useState(false)
     const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
     const [error, setError] = useState("");
@@ -56,8 +56,8 @@ export function CartDialog({
         email: "",
         address: "",
         notes: "",
-        city:"",
-        country:""
+        city: "",
+        country: ""
     });
 
     const HandleNext = () => {
@@ -411,8 +411,13 @@ export function CartDialog({
                                     <button
                                         type="button"
                                         onClick={HandleNext}
-                                        disabled={!userDetails}
-                                        className="w-full bg-[#18181B] justify-self-end text-white rounded-full py-3  font-medium"
+                                        disabled={
+                                            !userDetails.firstName ||
+                                            !userDetails.lastName ||
+                                            !userDetails.phoneNumber ||
+                                            !userDetails.address ||
+                                            !userDetails.city
+                                        } className="w-full bg-[#18181B] justify-self-end text-white rounded-full py-3  font-medium"
                                     >
                                         Pay Now
                                     </button>
@@ -578,14 +583,16 @@ export function CartDialog({
 
                                         <div className="flex justify-between items-center border-t border-[#E4E4E7] py-3">
                                             <span>Total</span>
-                                            <span className="font-bold">{TotalFee}SEK</span>
+                                            <span className="font-bold">{TotalFee} SEK</span>
                                         </div>
                                     </div>
                                 </div>
 
                                 <Elements stripe={stripePromise}>
                                     <OrderPaymentForm
+                                        products={cart.products}
                                         totalFee={TotalFee}
+                                        shippingFee={shippingFee}
                                         selectedCity={userDetails.city}
                                         handleNext={HandleNext}
                                         handleBack={HandlePrevious}
@@ -597,6 +604,17 @@ export function CartDialog({
 
                             </div>
                         )}
+
+                        {currentStep === 4 && (
+                            <PaymentStatus
+                                success={success}
+                                failure={failure}
+                                totalFee={TotalFee}
+                                address={userDetails?.address}
+
+                            />
+                        )}
+
 
 
 
