@@ -9,13 +9,13 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { useNavigate } from "react-router-dom";
 
 export function Account() {
-const navigate=useNavigate()
+  const navigate = useNavigate()
 
 
-const HandleLogout=()=>{
+  const HandleLogout = () => {
     logout()
     navigate("/")
-}
+  }
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -29,6 +29,8 @@ const HandleLogout=()=>{
           <a className="text-[#09090B]  cursor-pointer font-medium" href="/orders">Order History</a>
           <span className="text-[#09090B] cursor-pointer font-medium">Review & Feedback</span>
           <span className="text-[#09090B] cursor-pointer font-medium">Discounts</span>
+          <a href="/settings" className="text-[#09090B] cursor-pointer font-medium">Setttings</a>
+
           <span className="text-[#DC2626] cursor-pointer font-medium" onClick={HandleLogout}>Sign out</span>
         </div>
       </PopoverContent>

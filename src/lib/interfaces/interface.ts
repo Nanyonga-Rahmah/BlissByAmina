@@ -3,12 +3,40 @@ export interface IUser {
   lastName: string;
   firstName: string;
   password: string;
+  profilePhoto?:string;
   email: string;
+  cartId:number;
   bookingIds?: number[];
   isVerified?: boolean;
   createdAt: Date;
 }
+export interface ICartItem {
+  productVariantId: number;
+  quantity: number;
+  product:IProductVariant
+}
+export interface IDiscount {
+  id?: number;
+  name: string;
+  code: string;
+  status: string;
+  limit: number;
+  value: string;
+  usage?: number;
+  appliesTo: string;
+  startDate: string;
+  endDate: string;
+  minOrderValue: number,
+  createdAt: Date,
+  perCustomerLimit: number,
+  category: string
+}
 
+export interface ICart {
+  id?: number;
+  userId: number;
+  products: ICartItem[];
+}
 export interface IBooking {
   id?: number;
   serviceName: string;
@@ -71,6 +99,7 @@ export interface IVariant {
 export interface IProduct {
   id?: number;
   name: string;
+  price?:number;
 
   images: string[];
   status: string;
@@ -81,6 +110,8 @@ export interface IProduct {
 }
 export interface IProductVariant {
   id?: number;
+  name:string,
+  description:string,
   color: string;
   type: string;
   size: string;

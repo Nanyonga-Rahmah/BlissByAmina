@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -9,18 +10,50 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
+import { useState } from "react";
+import { VerifyEmail } from "@/lib/routes";
+
+
+interface FormProps{
+  setSuccess:(status:boolean)=>void
+}
 
 const formSchema = z.object({
   email: z.string().email({ message: "Enter a valid email" }),
 });
 
-export function ResetForm() {
+export function ResetForm({setSuccess}:FormProps) {
+  const [submitting, setSubmitting] = useState(false);
+
   const form = useForm<z.infer<typeof formSchema>>({
     defaultValues: { email: "" },
   });
 
-  const onSubmit = () => {};
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    setSubmitting(true);
+    try {
+      const response = await fetch(VerifyEmail(), {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
 
+      if (response.ok) {
+        setSuccess(true)
+
+
+      } else {
+
+        setSuccess(false)
+      }
+      console.log(response);
+    } catch (error) {
+    } finally {
+      setSubmitting(false);
+    }
+  };
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4 mt-4">
@@ -61,7 +94,8 @@ export function ResetForm() {
           type="submit"
           className="w-full h-11 rounded-full bg-black text-white font-semibold"
         >
-          Send instructions
+          {submitting ? "Submitting" : "Send instructions"}
+
         </Button>
       </form>
     </Form>
