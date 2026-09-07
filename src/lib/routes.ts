@@ -26,6 +26,9 @@ export const AllRemovalServices=()=>`${import.meta.env.VITE_BACKEND_URL}/getRemo
 
 export const MakePayment=()=>`${import.meta.env.VITE_BACKEND_URL}/payments/charge`
 
+export const MakeOrderPayment=()=>`${import.meta.env.VITE_BACKEND_URL}/payments/orders/charge`
+
+
 export const CreateBooking=()=>`${import.meta.env.VITE_BACKEND_URL}/createBooking`
 
 export const UserBookings=(userId:number)=>`${import.meta.env.VITE_BACKEND_URL}/bookings/user/${userId}`

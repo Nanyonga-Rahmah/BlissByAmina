@@ -11,7 +11,7 @@ import {
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { CreateOrder, MakePayment } from "@/lib/routes";
+import { CreateOrder, MakeOrderPayment} from "@/lib/routes";
 import type { IVariant } from "@/lib/interfaces/interface";
 import {
   getAuthUser,
@@ -40,6 +40,8 @@ export interface ICartItem {
 interface CardDetailsFormProps {
   setSuccess: React.Dispatch<React.SetStateAction<boolean>>;
   setFailure: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsSheetOpen: React.Dispatch<React.SetStateAction<boolean>>; // Close the sheet
+
   selectedVariant?: IVariant | null;
   selectedCity?: string | null;
   selectedDate?: Date | null;
@@ -62,6 +64,7 @@ export function OrderPaymentForm({
   handleNext,
   totalFee,
   handleBack,
+  setIsSheetOpen
 }: CardDetailsFormProps) {
   const token = getUserToken();
   const stripe = useStripe();
@@ -80,7 +83,7 @@ export function OrderPaymentForm({
     ? `${authUser.firstName ?? ""} ${authUser.lastName ?? ""}`.trim()
     : "Guest";
 
- 
+
 
   // Helper function to create order
   const createOrderRequest = async (paymentIdVal: string = "") => {
@@ -148,7 +151,7 @@ export function OrderPaymentForm({
       }
 
       // STEP 3: Process Payment
-      const response = await fetch(MakePayment(), {
+      const response = await fetch(MakeOrderPayment(), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -172,6 +175,8 @@ export function OrderPaymentForm({
 
       setTimeout(() => {
         handleNext();
+                setIsSheetOpen(false); 
+
       }, 2000);
     } catch (error) {
       toast.error(
@@ -189,7 +194,7 @@ export function OrderPaymentForm({
         onSubmit={form.handleSubmit(onSubmit)}
         className="grid md:grid-cols-2 gap-4 my-4"
       >
-        
+
 
         <FormField
           control={form.control}
