@@ -27,7 +27,7 @@ export const useUserBookings = () => {
 
         console.log(response);
         if (!response.ok) {
-          throw new Error("Failed to fetch cities");
+          throw new Error("Failed to fetch user bookings");
         }
 
         const data = await response.json();

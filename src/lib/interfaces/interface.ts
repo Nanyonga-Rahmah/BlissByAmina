@@ -86,6 +86,28 @@ export interface IService {
   variants?: number[];
 }
 
+
+export interface IOrder {
+  id?: number;
+  products: ICartItem[];
+
+  orderDate: Date;
+  isCanceled: boolean;
+  deliveryDate: Date;
+  cancelationReason?: string | undefined;
+  status: string;
+
+  paymentStatus: string;
+  city: string;
+
+  customerName: string;
+  userId: number;
+  amount: string;
+  shippingFee: number;
+  address: string;
+  paymentId?: string;
+}
+
 export interface IVariant {
   id?: number;
   name: string;

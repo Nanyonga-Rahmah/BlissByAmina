@@ -35,6 +35,8 @@ export const UserBookings=(userId:number)=>`${import.meta.env.VITE_BACKEND_URL}/
 
 export const CancelBooking=(bookingId:number)=>`${import.meta.env.VITE_BACKEND_URL}/bookings/cancel/${bookingId}`
 
+export const UserOrders=(userId:number)=>`${import.meta.env.VITE_BACKEND_URL}/orders/user/${userId}`
+
 
 export const DeleteProduct=(id:number)=>`${import.meta.env.VITE_BACKEND_URL}/products/${id}`
 
