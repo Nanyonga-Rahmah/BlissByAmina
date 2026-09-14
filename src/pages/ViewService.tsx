@@ -32,7 +32,7 @@ function ViewService() {
   const { services, loading } = useServices();
   const filteredServices = services?.filter(
     (service) => service.id !== serviceId,
-  )??[];
+  ) ?? [];
 
   useEffect(() => {
     const authStatus = isAuthenticated();
@@ -121,13 +121,12 @@ function ViewService() {
       <Navigation />
       <div className="grid px-10 md:grid-cols-2 md:gap-16 md:px-16 my-10">
         <div>
-          <div className="md:h-[500px] rounded-md overflow-hidden bg-muted">
+          <div className="w-full max-w-[600px] aspect-[4/3] rounded-md overflow-hidden">
             {activeImage && (
               <img
                 src={activeImage}
                 alt={service?.name}
-                style={{ objectPosition: "center 50% " }}
-                className="w-full h-full object-cover object-center"
+                className="w-full h-full object-contain object-left"
               />
             )}
           </div>
@@ -139,11 +138,10 @@ function ViewService() {
                   key={index}
                   type="button"
                   onClick={() => setSelectedImage(image)}
-                  className={`h-24 rounded-md overflow-hidden border cursor-pointer ${
-                    activeImage === image
+                  className={`h-24 rounded-md overflow-hidden border cursor-pointer ${activeImage === image
                       ? "border-black border-2"
                       : "border-[#E4E4E7]"
-                  }`}
+                    }`}
                 >
                   <img
                     src={image}
@@ -174,11 +172,10 @@ function ViewService() {
                 key={index}
                 onClick={() => setSelectedSize(sizeOption)}
                 className={`border px-4 py-2 m-2 capitalize cursor-pointer rounded-full 
-            ${
-              selectedSize === sizeOption
-                ? "font-bold border-black"
-                : "font-normal"
-            }
+            ${selectedSize === sizeOption
+                    ? "font-bold border-black"
+                    : "font-normal"
+                  }
           `}
               >
                 {sizeOption}
@@ -194,11 +191,10 @@ function ViewService() {
                   key={index}
                   onClick={() => setSelectedLength(lengthOption ?? "")}
                   className={`border px-8 py-2 m-2 capitalize  cursor-pointer rounded-full 
-            ${
-              selectedLength === lengthOption
-                ? "font-bold border-black"
-                : "font-normal"
-            }
+            ${selectedLength === lengthOption
+                      ? "font-bold border-black"
+                      : "font-normal"
+                    }
           `}
                 >
                   {lengthOption}
@@ -232,11 +228,10 @@ function ViewService() {
                         key={index}
                         onClick={() => setSelectedRemovalSize(sizeOption)}
                         className={`border px-4 py-2 m-2 capitalize cursor-pointer rounded-full 
-            ${
-              selectedRemovalSize === sizeOption
-                ? "font-bold border-black"
-                : "font-normal"
-            }
+            ${selectedRemovalSize === sizeOption
+                            ? "font-bold border-black"
+                            : "font-normal"
+                          }
           `}
                       >
                         {sizeOption}
@@ -254,11 +249,10 @@ function ViewService() {
                             setSelectedRemovalLength(lengthOption ?? "")
                           }
                           className={`border px-8 py-2 m-2 capitalize  cursor-pointer rounded-full 
-            ${
-              selectedRemovalLength === lengthOption
-                ? "font-bold border-black"
-                : "font-normal"
-            }
+            ${selectedRemovalLength === lengthOption
+                              ? "font-bold border-black"
+                              : "font-normal"
+                            }
           `}
                         >
                           {lengthOption}

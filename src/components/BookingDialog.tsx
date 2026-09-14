@@ -56,6 +56,7 @@ export interface CityOption {
   name: string;
   travelFee?: number;
 }
+  const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 export function BookingDialog({
   selectedVariant,
@@ -70,7 +71,6 @@ export function BookingDialog({
   const [selectedCity, setSelectedCity] = useState<CityOption>();
   const [success, setSuccess] = useState(false);
   const [failure, setFailure] = useState(false);
-  const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
   const { cities } = useCities();
   const { availableDays } = useAvailableDays();
 

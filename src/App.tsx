@@ -8,7 +8,7 @@ const LandingPage = lazy(() => import("./pages/LandingPage"));
 const VerifyEmailPage = lazy(() => import("./pages/VerifyEmailPage"));
 const OrderHistory = lazy(() => import("./pages/OrderHistory"));
 const ViewService = lazy(() => import("./pages/ViewService"));
-const Services = lazy(() => import("./pages/Services"));
+const ServicesPage = lazy(() => import("./pages/Services"));
 const ContactUs = lazy(() => import("./pages/ContactUs"));
 const BookingPolicyPage = lazy(() => import("./pages/BookingPolicyPage"));
 const TermsOfService = lazy(() => import("./pages/TermsOfService"));
@@ -43,7 +43,7 @@ function App() {
             <Route path="/service/:id" element={<ViewService />} />
             <Route path="/products/:id" element={<ViewProduct />} />
 
-            <Route path="/services" element={<Services />} />
+            <Route path="/services" element={<ServicesPage />} />
             <Route path="/contact-us" element={<ContactUs />} />
             <Route path="/booking" element={<BookingPolicyPage />} />
             <Route path="/terms" element={<TermsOfService />} />

@@ -3,14 +3,22 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { logout } from "@/lib/cookies/User-Management";
+import { getAuthUser, logout } from "@/lib/cookies/User-Management";
 import { UserIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useNavigate } from "react-router-dom";
+import { CartDialog } from "./Cart";
+import { useUser } from "@/lib/hooks/use-user";
 
-export function Account() {
+
+interface AccountProps {
+  isLoggedIn: boolean
+}
+export function Account({ isLoggedIn }: AccountProps) {
   const navigate = useNavigate()
+  const user = getAuthUser()
 
+  const { dbuser } = useUser(user?.id ?? 0)
 
   const HandleLogout = () => {
     logout()
@@ -26,6 +34,10 @@ export function Account() {
       </PopoverTrigger>
       <PopoverContent className="w-48 absolute right-px top-4">
         <div className="flex flex-col gap-1">
+          <div className="flex md:hidden">
+            <CartDialog lastName={user?.lastName} userId={user?.id ?? 0} isLogggedIn={isLoggedIn} cartId={dbuser?.cartId ?? 0} />
+
+          </div>
           <a className="text-[#09090B]  cursor-pointer font-medium" href="/orders">Order History</a>
           <span className="text-[#09090B] cursor-pointer font-medium">Review & Feedback</span>
           <span className="text-[#09090B] cursor-pointer font-medium">Discounts</span>

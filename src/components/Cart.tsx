@@ -29,6 +29,8 @@ interface CartProps {
     cartId?: number;
     userId: number;
 }
+    const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
+
 
 export function CartDialog({
     lastName,
@@ -44,7 +46,6 @@ export function CartDialog({
     const [discount, setDiscount] = useState<IDiscount | null>();
     const [, setSuccess] = useState(false)
     const [, setFailure] = useState(false)
-    const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
     const [isSheetOpen, setIsSheetOpen] = useState<boolean>(false);
 
     const [error, setError] = useState("");

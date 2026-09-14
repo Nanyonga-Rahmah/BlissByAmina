@@ -64,22 +64,22 @@ function ViewProduct() {
 
   const handleAddToCart = async () => {
     if (!isLoggedIn) {
-      alert("Please log in to add products to your cart.");
+      toast.warning("Please log in to add products to your cart.");
       return;
     }
 
     if (!product?.id) {
-      alert("Product not found.");
+      toast.error("Product not found.");
       return;
     }
 
     if (qty <= 0) {
-      alert("Quantity must be greater than 0.");
+      toast.warning("Quantity must be greater than 0.");
       return;
     }
 
     if (product.quantity !== undefined && qty > product.quantity) {
-      alert("Not enough stock available.");
+      toast.warning("Not enough stock available.");
       return;
     }
 
@@ -87,7 +87,7 @@ function ViewProduct() {
     const userId = userInfo?.id;
 
     if (!userId) {
-      alert("User information not found. Please log in again.");
+      toast.error("User information not found. Please log in again.");
       return;
     }
 
@@ -126,7 +126,7 @@ function ViewProduct() {
       toast.error("Add to cart error:")
         ;
 
-      alert(
+      toast.error(
         error instanceof Error
           ? error.message
           : "Failed to add product to cart",
@@ -143,13 +143,36 @@ function ViewProduct() {
       <div className="grid px-10 md:grid-cols-2 md:gap-16 md:px-16 my-10">
         {/* Image column */}
         <div>
-          <div className="md:h-[500px] rounded-md overflow-hidden bg-muted">
+          <div className="flex md:hidden justify-between my-3">
+              {typeof stockLeft === "number" &&  (
+                <span className="flex items-center gap-1 bg-[#DC2626] text-white text-[11px] font-medium px-3 py-1 rounded-full whitespace-nowrap">
+                  ⚠ Only {stockLeft} left
+                </span>
+              )}
+              
+            <div className="flex items-center gap-1 shrink-0">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <Star
+                  key={i}
+                  size={16}
+                  className={
+                    i < Math.round(4)
+                      ? "fill-yellow-400 text-yellow-400"
+                      : "text-gray-300"
+                  }
+                />
+              ))}
+              <span className="text-sm text-muted-foreground ml-1">
+                ({5} reviews)
+              </span>
+            </div>
+          </div>
+          <div className="md:h-[500px] rounded-md overflow-hidden ">
             {activeImage && (
               <img
                 src={activeImage}
                 alt={product?.name}
-                style={{ objectPosition: "center 50%" }}
-                className="w-full h-full object-cover object-center"
+                className="w-full h-full object-contain object-left "
               />
             )}
           </div>
@@ -161,7 +184,7 @@ function ViewProduct() {
                   key={index}
                   type="button"
                   onClick={() => setSelectedImage(image)}
-                  className={`h-24 rounded-md overflow-hidden border cursor-pointer ${activeImage === image
+                  className={`h-24 rounded-md overflow-hidden border cursor-pointer mix-blend-multiply ${activeImage === image
                     ? "border-black border-2"
                     : "border-[#E4E4E7]"
                     }`}
@@ -169,7 +192,7 @@ function ViewProduct() {
                   <img
                     src={image}
                     alt={`${product?.name} ${index + 1}`}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain mix-blend-multiply"
                   />
                 </button>
               ))}
@@ -177,21 +200,21 @@ function ViewProduct() {
           )}
         </div>
 
-        {/* Details column */}
         <div>
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <h3 className="text-[#18181B] font-bold text-[42px]">
                 {product?.name}
               </h3>
-              {typeof stockLeft === "number" && stockLeft <= 5 && (
-                <span className="flex items-center gap-1 bg-[#DC2626] text-white text-[11px] font-medium px-3 py-1 rounded-full whitespace-nowrap">
+                 {typeof stockLeft === "number" &&  (
+                <span className="hidden md:flex items-center gap-1 bg-[#DC2626] text-white text-[11px] font-medium px-3 py-1 rounded-full whitespace-nowrap">
                   ⚠ Only {stockLeft} left
                 </span>
               )}
+            
             </div>
 
-            <div className="flex items-center gap-1 shrink-0">
+            <div className="hidden md:flex items-center gap-1 shrink-0">
               {Array.from({ length: 5 }).map((_, i) => (
                 <Star
                   key={i}

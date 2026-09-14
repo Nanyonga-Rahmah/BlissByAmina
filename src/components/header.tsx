@@ -44,14 +44,14 @@ export default function Navigation() {
       </div>
 
       <div className="hidden md:flex items-center space-x-6 text-sm font-medium text-black">
-        <span className="cursor-pointer">BOOK APPOINTMENT</span>
+        <a className="cursor-pointer" href="/">BOOK APPOINTMENT</a>
 
         <CartDialog lastName={user?.lastName} userId={user?.id ??0} isLogggedIn={isLoggedIn} cartId={dbuser?.cartId ?? 0} />
 
 
         {isLoggedIn ? (
           <>
-            <Account />
+            <Account isLoggedIn={isLoggedIn} />
           </>
         ) : (
           <>
@@ -64,7 +64,7 @@ export default function Navigation() {
       <div className="flex md:hidden">
         {isLoggedIn ? (
           <>
-            <Account />
+            <Account isLoggedIn={isLoggedIn} />
           </>
         ) : (
           <>

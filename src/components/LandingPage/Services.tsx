@@ -41,11 +41,12 @@ function Services({ Services, loading }: ServiceProps) {
               className="rounded-[20px] border cursor-pointer border-[#E4E4E7] bg-[#FAFAFA] p-3"
               key={index}
             >
-              <div className="md:h-[220px] w-full rounded-md overflow-hidden">
+              {/* Main Image Container */}
+              <div className="w-full aspect-[4/3] overflow-hidden rounded-t-[20px]">
                 <img
                   src={service.images?.[0]}
                   alt={service.name}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain object-center"
                 />
               </div>
 
