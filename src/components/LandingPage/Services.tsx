@@ -46,7 +46,7 @@ function Services({ Services, loading }: ServiceProps) {
                 <img
                   src={service.images?.[0]}
                   alt={service.name}
-                  className="w-full h-full object-contain object-center"
+                  className="w-full h-full object-cover object-center"
                 />
               </div>
 

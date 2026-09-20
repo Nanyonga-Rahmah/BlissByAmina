@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import HeroBanner from "@/components/LandingPage/Banner";
+// import HeroBanner from "@/components/LandingPage/Banner";
 import Navigation from "@/components/header";
 import HeroSection from "@/components/LandingPage/hero";
 import Services from "@/components/LandingPage/Services";
@@ -47,7 +47,7 @@ function LandingPage() {
     <div>
       <Navigation />
       <HeroSection />
-      <HeroBanner />
+      {/* <HeroBanner /> */}
 
       <Services Services={visibleServices} loading={loading} />
 

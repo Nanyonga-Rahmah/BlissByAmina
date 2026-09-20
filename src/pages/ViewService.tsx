@@ -126,7 +126,7 @@ function ViewService() {
               <img
                 src={activeImage}
                 alt={service?.name}
-                className="w-full h-full object-contain object-left"
+                className="w-full h-full object-cover object-left"
               />
             )}
           </div>
