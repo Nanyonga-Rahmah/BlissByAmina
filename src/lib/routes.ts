@@ -1,63 +1,65 @@
-export const SignUpApi=()=>`${import.meta.env.VITE_BACKEND_URL}/auth/register`
+const BASE = import.meta.env.VITE_BACKEND_URL || "";
 
-export const LoginInApi=()=>`${import.meta.env.VITE_BACKEND_URL}/auth/login`
+export const SignUpApi=()=>`${BASE}/auth/register`
 
-export const VerifyApi=()=>`${import.meta.env.VITE_BACKEND_URL}/auth/verify`
+export const LoginInApi=()=>`${BASE}/auth/login`
 
-export const ResendLink=()=>`${import.meta.env.VITE_BACKEND_URL}/auth/resend-link`
+export const VerifyApi=()=>`${BASE}/auth/verify`
 
-export const UpdateUser=(id:number)=>`${import.meta.env.VITE_BACKEND_URL}/users/${id}`
+export const ResendLink=()=>`${BASE}/auth/resend-link`
 
-export const VerifyEmail=()=>`${import.meta.env.VITE_BACKEND_URL}/auth/verifyEmail`
+export const UpdateUser=(id:number)=>`${BASE}/users/${id}`
 
-
-export const FetchService=(id:number)=>`${import.meta.env.VITE_BACKEND_URL}/services/${id}`
-
-export const FetchVariants=(id:number)=>`${import.meta.env.VITE_BACKEND_URL}/serviceVariants/${id}`
-
-export const AllAvailableDays=()=>`${import.meta.env.VITE_BACKEND_URL}/availableDays`
-
-export const AllCities=()=>`${import.meta.env.VITE_BACKEND_URL}/cities`
-
-export const AllServices=()=>`${import.meta.env.VITE_BACKEND_URL}/activeServices`
-
-export const AllRemovalServices=()=>`${import.meta.env.VITE_BACKEND_URL}/getRemovalServices`
+export const VerifyEmail=()=>`${BASE}/auth/verifyEmail`
 
 
-export const MakePayment=()=>`${import.meta.env.VITE_BACKEND_URL}/payments/charge`
+export const FetchService=(id:number)=>`${BASE}/services/${id}`
 
-export const MakeOrderPayment=()=>`${import.meta.env.VITE_BACKEND_URL}/payments/orders/charge`
+export const FetchVariants=(id:number)=>`${BASE}/serviceVariants/${id}`
+
+export const AllAvailableDays=()=>`${BASE}/availableDays`
+
+export const AllCities=()=>`${BASE}/cities`
+
+export const AllServices=()=>`${BASE}/activeServices`
+
+export const AllRemovalServices=()=>`${BASE}/getRemovalServices`
 
 
-export const CreateBooking=()=>`${import.meta.env.VITE_BACKEND_URL}/createBooking`
+export const MakePayment=()=>`${BASE}/payments/charge`
 
-export const UserBookings=(userId:number)=>`${import.meta.env.VITE_BACKEND_URL}/bookings/user/${userId}`
-
-export const CancelBooking=(bookingId:number)=>`${import.meta.env.VITE_BACKEND_URL}/bookings/cancel/${bookingId}`
-
-export const UserOrders=(userId:number)=>`${import.meta.env.VITE_BACKEND_URL}/orders/user/${userId}`
+export const MakeOrderPayment=()=>`${BASE}/payments/orders/charge`
 
 
-export const DeleteProduct=(id:number)=>`${import.meta.env.VITE_BACKEND_URL}/products/${id}`
+export const CreateBooking=()=>`${BASE}/createBooking`
 
-export const UpdateProduct=(id:number)=>`${import.meta.env.VITE_BACKEND_URL}/products/${id}`
+export const UserBookings=(userId:number)=>`${BASE}/bookings/user/${userId}`
 
-export const CreateProductVariant=()=>`${import.meta.env.VITE_BACKEND_URL}/createProductVariant`
+export const CancelBooking=(bookingId:number)=>`${BASE}/bookings/cancel/${bookingId}`
 
-export const CreateProduct=()=>`${import.meta.env.VITE_BACKEND_URL}/createProduct`
+export const UserOrders=(userId:number)=>`${BASE}/orders/user/${userId}`
 
-export const AllProducts=()=>`${import.meta.env.VITE_BACKEND_URL}/allProductVariants`
 
-export const FetchProduct=(id:number)=>`${import.meta.env.VITE_BACKEND_URL}/products/${id}`
+export const DeleteProduct=(id:number)=>`${BASE}/products/${id}`
 
-export const FetchProductVariant=(id:number)=>`${import.meta.env.VITE_BACKEND_URL}/products/variants/${id}`
+export const UpdateProduct=(id:number)=>`${BASE}/products/${id}`
 
-export const AddToCart=()=>`${import.meta.env.VITE_BACKEND_URL}/addToCart`
+export const CreateProductVariant=()=>`${BASE}/createProductVariant`
 
-export const FetchUser=(userId:number|undefined)=>`${import.meta.env.VITE_BACKEND_URL}/users/${userId}`
+export const CreateProduct=()=>`${BASE}/createProduct`
 
-export const FetchCart=(userId:number)=>`${import.meta.env.VITE_BACKEND_URL}/${userId}`
+export const AllProducts=()=>`${BASE}/allProductVariants`
 
-export const GetDiscountByCode=(code:string)=>`${import.meta.env.VITE_BACKEND_URL}/discountCode/${code}`
+export const FetchProduct=(id:number)=>`${BASE}/products/${id}`
 
-export const CreateOrder=()=>`${import.meta.env.VITE_BACKEND_URL}/createOrder`
+export const FetchProductVariant=(id:number)=>`${BASE}/products/variants/${id}`
+
+export const AddToCart=()=>`${BASE}/addToCart`
+
+export const FetchUser=(userId:number|undefined)=>`${BASE}/users/${userId}`
+
+export const FetchCart=(userId:number)=>`${BASE}/${userId}`
+
+export const GetDiscountByCode=(code:string)=>`${BASE}/discountCode/${code}`
+
+export const CreateOrder=()=>`${BASE}/createOrder`

@@ -56,7 +56,8 @@ export interface CityOption {
   name: string;
   travelFee?: number;
 }
-  const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
+const stripeKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
+const stripePromise = stripeKey ? loadStripe(stripeKey) : null;
 
 export function BookingDialog({
   selectedVariant,
