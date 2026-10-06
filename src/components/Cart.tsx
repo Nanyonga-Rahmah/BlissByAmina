@@ -39,7 +39,7 @@ export function CartDialog({
     // cartId,
     isLogggedIn,
 }: CartProps) {
-    const { cart } = useUserCart(userId);
+    const { cart } = useUserCart(isLogggedIn && userId > 0 ? userId : undefined);
 
     // Keep quantity for each product separately
     const [quantities, setQuantities] = useState<Record<number, number>>({});

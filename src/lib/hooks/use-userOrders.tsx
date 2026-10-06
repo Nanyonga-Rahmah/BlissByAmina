@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { UserOrders } from "../routes";
 import type { IOrder } from "../interfaces/interface";
-import { getAuthUser } from "../cookies/User-Management";
+import { getAuthUser, getUserToken } from "../cookies/User-Management";
 
 export const useUserOrders = () => {
     const [orders, setOrders] = useState<IOrder[]>([]);
@@ -9,37 +9,61 @@ export const useUserOrders = () => {
     const [error, setError] = useState<string | null>(null);
 
     const userData = getAuthUser();
-
     const userId = userData?.id;
 
     useEffect(() => {
+        if (!userId || userId <= 0) {
+            setOrders([]);
+            setLoading(false);
+            setError(null);
+            return;
+        }
+
+        let isCancelled = false;
+
         const fetchOrders = async () => {
             setLoading(true);
             setError(null);
 
             try {
-                const response = await fetch(UserOrders(userId ?? 0), {
+                const token = getUserToken();
+                const headers: Record<string, string> = {
+                    "Content-Type": "application/json",
+                };
+                if (token) {
+                    headers["Authorization"] = `Bearer ${token}`;
+                }
+
+                const response = await fetch(UserOrders(userId), {
                     method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
+                    headers,
                 });
 
                 if (!response.ok) {
-                    throw new Error("Failed to fetch user bookings");
+                    throw new Error("Failed to fetch user orders");
                 }
 
                 const data = await response.json();
-                setOrders(data.orders ?? data);
+                if (!isCancelled) {
+                    setOrders(data.orders ?? data);
+                }
             } catch (err: any) {
-                setError(err.message || "Something went wrong");
+                if (!isCancelled) {
+                    setError(err.message || "Something went wrong");
+                }
             } finally {
-                setLoading(false);
+                if (!isCancelled) {
+                    setLoading(false);
+                }
             }
         };
 
         fetchOrders();
-    }, []);
+
+        return () => {
+            isCancelled = true;
+        };
+    }, [userId]);
 
     return {
         orders,

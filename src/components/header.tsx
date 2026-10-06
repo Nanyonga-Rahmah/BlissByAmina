@@ -11,7 +11,7 @@ export default function Navigation() {
   const token = getUserToken();
   const user = getAuthUser()
 
-  const { dbuser } = useUser(user?.id ?? 0)
+  const { dbuser } = useUser(isLoggedIn ? user?.id : undefined)
 
   useEffect(() => {
     const authStatus = isAuthenticated();
@@ -46,7 +46,7 @@ export default function Navigation() {
       <div className="hidden md:flex items-center space-x-6 text-sm font-medium text-black">
         <a className="cursor-pointer" href="/">BOOK APPOINTMENT</a>
 
-        <CartDialog lastName={user?.lastName} userId={user?.id ??0} isLogggedIn={isLoggedIn} cartId={dbuser?.cartId ?? 0} />
+        <CartDialog lastName={user?.lastName} userId={isLoggedIn && user?.id ? user.id : 0} isLogggedIn={isLoggedIn} cartId={dbuser?.cartId ?? 0} />
 
 
         {isLoggedIn ? (

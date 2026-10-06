@@ -18,7 +18,7 @@ export function Account({ isLoggedIn }: AccountProps) {
   const navigate = useNavigate()
   const user = getAuthUser()
 
-  const { dbuser } = useUser(user?.id ?? 0)
+  const { dbuser } = useUser(isLoggedIn ? user?.id : undefined)
 
   const HandleLogout = () => {
     logout()
@@ -35,7 +35,7 @@ export function Account({ isLoggedIn }: AccountProps) {
       <PopoverContent className="w-48 absolute right-px top-4">
         <div className="flex flex-col gap-1">
           <div className="flex md:hidden">
-            <CartDialog lastName={user?.lastName} userId={user?.id ?? 0} isLogggedIn={isLoggedIn} cartId={dbuser?.cartId ?? 0} />
+            <CartDialog lastName={user?.lastName} userId={isLoggedIn && user?.id ? user.id : 0} isLogggedIn={isLoggedIn} cartId={dbuser?.cartId ?? 0} />
 
           </div>
           <a className="text-[#09090B]  cursor-pointer font-medium" href="/orders">Order History</a>
