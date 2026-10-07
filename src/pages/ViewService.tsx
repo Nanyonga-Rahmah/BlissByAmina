@@ -12,6 +12,7 @@ import { useParams } from "react-router-dom";
 function ViewService() {
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [selectedLength, setSelectedLength] = useState<string | null>(null);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   const [selectedRemovalSize, setSelectedRemovalSize] = useState<string | null>(
     null,
@@ -29,9 +30,9 @@ function ViewService() {
   const serviceId = Number(id);
 
   const { services, loading } = useServices();
-  const filteredServices = services.filter(
+  const filteredServices = services?.filter(
     (service) => service.id !== serviceId,
-  );
+  ) ?? [];
 
   useEffect(() => {
     const authStatus = isAuthenticated();
@@ -41,7 +42,7 @@ function ViewService() {
   const { service } = useService({ serviceId });
   const { variants } = useVariants({ serviceId });
 
-  const removalService = services.find((service) =>
+  const removalService = services?.find((service) =>
     service.name.toLowerCase().includes("removal"),
   );
 
@@ -91,6 +92,14 @@ function ViewService() {
     ),
   ];
 
+  const serviceImages =
+    service?.images && service.images.length > 0
+      ? service.images
+      : service?.image
+        ? [service.image]
+        : [];
+
+  const activeImage = selectedImage ?? serviceImages[0];
   // const isChecked = Boolean(
   //   checked &&
   //   selectedRemovalSize &&
@@ -103,18 +112,47 @@ function ViewService() {
     selectedSize && selectedLength && selectedVariant,
   );
 
+  useEffect(() => {
+    setSelectedImage(null);
+  }, [serviceId]);
+
   return (
     <section>
       <Navigation />
       <div className="grid px-10 md:grid-cols-2 md:gap-16 md:px-16 my-10">
-        <div className=" md:h-[500px]  rounded-md overflow-hidden">
-          <img
-            src={service?.image}
-            alt={service?.name}
-            style={{ objectPosition: "center 40%" }}
-            className="w-full h-full object-cover object-center "
-          />
-        </div>{" "}
+        <div>
+          <div className="w-full max-w-[600px] aspect-[4/3] rounded-md overflow-hidden">
+            {activeImage && (
+              <img
+                src={activeImage}
+                alt={service?.name}
+                className="w-full h-full object-cover object-left"
+              />
+            )}
+          </div>
+
+          {serviceImages.length > 1 && (
+            <div className="grid grid-cols-4 gap-3 mt-3">
+              {serviceImages.map((image, index) => (
+                <button
+                  key={index}
+                  type="button"
+                  onClick={() => setSelectedImage(image)}
+                  className={`h-24 rounded-md overflow-hidden border cursor-pointer ${activeImage === image
+                      ? "border-black border-2"
+                      : "border-[#E4E4E7]"
+                    }`}
+                >
+                  <img
+                    src={image}
+                    alt={`${service?.name} ${index + 1}`}
+                    className="w-full h-full object-cover"
+                  />
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
         <div>
           <div className="flex  flex-col ">
             <div className="flex items-center justify-between">
@@ -134,11 +172,10 @@ function ViewService() {
                 key={index}
                 onClick={() => setSelectedSize(sizeOption)}
                 className={`border px-4 py-2 m-2 capitalize cursor-pointer rounded-full 
-            ${
-              selectedSize === sizeOption
-                ? "font-bold border-black"
-                : "font-normal"
-            }
+            ${selectedSize === sizeOption
+                    ? "font-bold border-black"
+                    : "font-normal"
+                  }
           `}
               >
                 {sizeOption}
@@ -154,11 +191,10 @@ function ViewService() {
                   key={index}
                   onClick={() => setSelectedLength(lengthOption ?? "")}
                   className={`border px-8 py-2 m-2 capitalize  cursor-pointer rounded-full 
-            ${
-              selectedLength === lengthOption
-                ? "font-bold border-black"
-                : "font-normal"
-            }
+            ${selectedLength === lengthOption
+                      ? "font-bold border-black"
+                      : "font-normal"
+                    }
           `}
                 >
                   {lengthOption}
@@ -192,11 +228,10 @@ function ViewService() {
                         key={index}
                         onClick={() => setSelectedRemovalSize(sizeOption)}
                         className={`border px-4 py-2 m-2 capitalize cursor-pointer rounded-full 
-            ${
-              selectedRemovalSize === sizeOption
-                ? "font-bold border-black"
-                : "font-normal"
-            }
+            ${selectedRemovalSize === sizeOption
+                            ? "font-bold border-black"
+                            : "font-normal"
+                          }
           `}
                       >
                         {sizeOption}
@@ -214,11 +249,10 @@ function ViewService() {
                             setSelectedRemovalLength(lengthOption ?? "")
                           }
                           className={`border px-8 py-2 m-2 capitalize  cursor-pointer rounded-full 
-            ${
-              selectedRemovalLength === lengthOption
-                ? "font-bold border-black"
-                : "font-normal"
-            }
+            ${selectedRemovalLength === lengthOption
+                              ? "font-bold border-black"
+                              : "font-normal"
+                            }
           `}
                         >
                           {lengthOption}
@@ -266,7 +300,9 @@ function ViewService() {
       </div>
 
       <div>
-        <Services Services={filteredServices} loading={loading} />
+        {Services && (
+          <Services Services={filteredServices} loading={loading} />
+        )}{" "}
       </div>
     </section>
   );

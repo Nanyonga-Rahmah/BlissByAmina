@@ -1,34 +1,58 @@
+import { lazy, Suspense, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import LandingPage from "./pages/LandingPage";
-import VerifyEmailPage from "./pages/VerifyEmailPage";
 import { Toaster } from "./components/ui/sonner";
-import OrderHistory from "./pages/OrderHistory";
-import ViewService from "./pages/ViewService";
-import Services from "./pages/Services";
-import ContactUs from "./pages/ContactUs";
-import BookingPolicyPage from "./pages/BookingPolicyPage";
-import TermsOfService from "./pages/TermsOfService";
-import UserForbidden from "./pages/UserForbidden";
-import PrivacyPolicy from "./pages/PrivacyPolicy";
+import { prefetchServicesAndProducts } from "./lib/pre-fetch";
+import Settings from "./pages/SettingsPage";
+
+const LandingPage = lazy(() => import("./pages/LandingPage"));
+const VerifyEmailPage = lazy(() => import("./pages/VerifyEmailPage"));
+const OrderHistory = lazy(() => import("./pages/OrderHistory"));
+const ViewService = lazy(() => import("./pages/ViewService"));
+const ServicesPage = lazy(() => import("./pages/Services"));
+const ContactUs = lazy(() => import("./pages/ContactUs"));
+const BookingPolicyPage = lazy(() => import("./pages/BookingPolicyPage"));
+const TermsOfService = lazy(() => import("./pages/TermsOfService"));
+const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
+const UserForbidden = lazy(() => import("./pages/UserForbidden"));
+const ViewProduct = lazy(() => import("./pages/ViewProduct"));
+
+function RouteFallback() {
+  return (
+    <div className="flex h-screen w-full items-center justify-center">
+      <div className="h-8 w-8 animate-spin rounded-full border-2 border-gray-300 border-t-gray-900" />
+    </div>
+  );
+}
 
 function App() {
+  useEffect(() => {
+    // Fire both at once: the LandingPage JS chunk and the backend data.
+    import("./pages/LandingPage");
+    prefetchServicesAndProducts();
+  }, []);
+
   return (
     <>
       <Toaster />
       <BrowserRouter>
-        <Routes>
-          <Route path="*" element={<LandingPage />} />
-          <Route path="/auth/verify-email" element={<VerifyEmailPage />} />
-          <Route path="/orders" element={<OrderHistory />} />
-          <Route path="/service/:id" element={<ViewService />} />
-          <Route path="/services" element={<Services />} />
-          <Route path="/contact-us" element={<ContactUs />} />
-          <Route path="/booking" element={<BookingPolicyPage />} />
-          <Route path="/terms" element={<TermsOfService />} />
-          <Route path="/privacy-policy" element={<PrivacyPolicy/>}/>
+        <Suspense fallback={<RouteFallback />}>
+          <Routes>
+            <Route path="*" element={<LandingPage />} />
+            <Route path="/auth/verify-email" element={<VerifyEmailPage />} />
+            <Route path="/orders" element={<OrderHistory />} />
+            <Route path="/service/:id" element={<ViewService />} />
+            <Route path="/products/:id" element={<ViewProduct />} />
 
-          <Route path="/user-forbidden" element={<UserForbidden/>}/>
-        </Routes>
+            <Route path="/services" element={<ServicesPage />} />
+            <Route path="/contact-us" element={<ContactUs />} />
+            <Route path="/booking" element={<BookingPolicyPage />} />
+            <Route path="/terms" element={<TermsOfService />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/settings" element={<Settings />} />
+
+            <Route path="/user-forbidden" element={<UserForbidden />} />
+          </Routes>
+        </Suspense>
       </BrowserRouter>
     </>
   );

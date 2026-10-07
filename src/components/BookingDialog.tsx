@@ -56,6 +56,8 @@ export interface CityOption {
   name: string;
   travelFee?: number;
 }
+const stripeKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
+const stripePromise = stripeKey ? loadStripe(stripeKey) : null;
 
 export function BookingDialog({
   selectedVariant,
@@ -70,7 +72,6 @@ export function BookingDialog({
   const [selectedCity, setSelectedCity] = useState<CityOption>();
   const [success, setSuccess] = useState(false);
   const [failure, setFailure] = useState(false);
-  const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
   const { cities } = useCities();
   const { availableDays } = useAvailableDays();
 
@@ -167,11 +168,10 @@ export function BookingDialog({
         <DialogTrigger asChild>
           <Button
             disabled={disabled || !isLoggedIn}
-            className={`uppercase text-white rounded-full w-full text-[20px] py-7 ${
-              disabled || !isLoggedIn
+            className={`uppercase text-white rounded-full w-full text-[20px] py-7 ${disabled || !isLoggedIn
                 ? "opacity-50 cursor-not-allowed"
                 : "cursor-pointer"
-            } `}
+              } `}
           >
             Continue to Book
           </Button>
@@ -332,11 +332,10 @@ export function BookingDialog({
                           type="button"
                           onClick={() => setSelectedTime(label)}
                           className={`border px-4 py-2 m-2 bg-[#FAFAFA] rounded-full
-            ${
-              selectedTime === label
-                ? "font-bold border-black"
-                : "border-[#E4E4E7]"
-            }
+            ${selectedTime === label
+                              ? "font-bold border-black"
+                              : "border-[#E4E4E7]"
+                            }
           `}
                         >
                           {label}
@@ -361,6 +360,7 @@ export function BookingDialog({
               />
             </div>
           )}
+
 
           {currentStep === 3 && (
             <div className="grid gap-4 ">

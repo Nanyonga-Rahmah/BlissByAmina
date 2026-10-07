@@ -1,13 +1,17 @@
-import { ShoppingCart } from "lucide-react";
-import { getUserToken, isAuthenticated } from "@/lib/cookies/User-Management";
+import { getAuthUser, getUserToken, isAuthenticated } from "@/lib/cookies/User-Management";
 import { Account } from "./AccountPopover";
 import { LoginDialog } from "./Login";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { CartDialog } from "./Cart";
+import { useUser } from "@/lib/hooks/use-user";
 
 export default function Navigation() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const token = getUserToken();
+  const user = getAuthUser()
+
+  const { dbuser } = useUser(isLoggedIn ? user?.id : undefined)
 
   useEffect(() => {
     const authStatus = isAuthenticated();
@@ -19,6 +23,7 @@ export default function Navigation() {
   const HandleClick = () => {
     navigate("/");
   };
+
 
   return (
     <div className="w-full flex items-center justify-between px-8 py-4 border-b bg-white">
@@ -39,16 +44,14 @@ export default function Navigation() {
       </div>
 
       <div className="hidden md:flex items-center space-x-6 text-sm font-medium text-black">
-        <span className="cursor-pointer">BOOK APPOINTMENT</span>
+        <a className="cursor-pointer" href="/">BOOK APPOINTMENT</a>
 
-        <span className="cursor-pointer flex items-center space-x-1">
-          <ShoppingCart className="h-5 w-5" strokeWidth={1.5} />
-          <span>CART</span>
-        </span>
+        <CartDialog lastName={user?.lastName} userId={isLoggedIn && user?.id ? user.id : 0} isLogggedIn={isLoggedIn} cartId={dbuser?.cartId ?? 0} />
+
 
         {isLoggedIn ? (
           <>
-            <Account />
+            <Account isLoggedIn={isLoggedIn} />
           </>
         ) : (
           <>
@@ -61,7 +64,7 @@ export default function Navigation() {
       <div className="flex md:hidden">
         {isLoggedIn ? (
           <>
-            <Account />
+            <Account isLoggedIn={isLoggedIn} />
           </>
         ) : (
           <>
