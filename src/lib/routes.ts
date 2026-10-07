@@ -63,3 +63,6 @@ export const FetchCart=(userId:number)=>`${BASE}/${userId}`
 export const GetDiscountByCode=(code:string)=>`${BASE}/discountCode/${code}`
 
 export const CreateOrder=()=>`${BASE}/createOrder`
+
+export const CancelOrder=(orderId:number|undefined)=>`${BASE}/cancel-order/${orderId}`
+

@@ -6,7 +6,9 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import type {  IOrder } from "@/lib/interfaces/interface";
+import type { IOrder } from "@/lib/interfaces/interface";
+import { ViewOrderDialog } from "../ViewOrderDetails";
+import { CancelOrderDialog } from "../CancelOrder";
 
 
 
@@ -14,20 +16,25 @@ interface OrdersTable {
     orders: IOrder[];
 }
 
-export function OrdersTable({ orders }: OrdersTable) {
-
-    const getStatus = (status: string) => {
+  export const getStatus = (status: string) => {
         switch (status) {
-            case "upcoming":
-                return <span className="text-green-500 bg-green-200 rounded-full p-2">Upcoming</span>;
-            case "completed":
-                return <span className="text-blue-500 rounded-full p-2 bg-blue-200">Completed</span>;
-            case "cancelled":
-                return <span className="text-red-500 rounded-full p-2 bg-red-200">Cancelled</span>;
+            case "succeeded":
+                return <span className="text-[#16A34A] bg-[#DCFCE7] rounded-full p-2">Paid</span>;
+            case "pending":
+                return <span className="bg-[#DBEAFE] text-[#2563EB] rounded-full p-2 text-sm">Pending</span>
+case "canceled":
+                return <span className="text-red-500 rounded-full p-2 bg-red-200">Canceled</span>;
+                case "processing refund":
+                return <span className="text-orange-500 rounded-full p-2 bg-orange-200">Processing Refund</span>;
+            case "failed":
+                return <span className="text-red-500 rounded-full p-2 bg-red-200">Failed</span>;
             default:
                 return <span className="text-gray-500 rounded-full p-2 bg-gray-200">Unknown</span>;
         }
     };
+export function OrdersTable({ orders }: OrdersTable) {
+
+  
 
     return (
         <Table>
@@ -45,41 +52,61 @@ export function OrdersTable({ orders }: OrdersTable) {
             </TableHeader>
             <TableBody>
                 {orders.map((order, index) => (
-                    <TableRow key={index}>
+                    <TableRow key={index} className="h-14">
                         <TableCell className="font-medium">
-                            <div className="flex flex-col gap-1">
-                                <span>{order.shippingFee}</span>
+                            <div className="flex  gap-1 ">
+
+                                {order.products.map((product, index) => (
+                                    <span key={index}>{product.product.name}</span>
+
+                                ))}
 
 
                             </div>
                         </TableCell>
                         <TableCell className="font-medium">
                             <div className="flex flex-col gap-1">
-                                <span>{order.paymentStatus}</span>
+                                <span>{Number(order.amount).toLocaleString()} SEK</span>
 
 
                             </div>
                         </TableCell>
                         <TableCell className="font-medium">
-                            <div className="flex flex-col gap-1">
-                                <span>{order.status}</span>
+                            <div className="">
+                                {getStatus(order.paymentStatus)}
+
+
+                            </div>
+                        </TableCell>
+                        <TableCell className="font-medium">
+                            <div>
+                                {getStatus(order.status)}
 
 
                             </div>
                         </TableCell>
                         <TableCell>
                             <div className="flex flex-col gap-1">
-                                <span>{String(order.orderDate)}</span>
+                                <span>
+                                    {new Date(order.orderDate).toLocaleDateString("en-GB", {
+                                        day: "2-digit",
+                                        month: "short",
+                                        year: "numeric",
+                                    })}
+                                </span>
 
+                                <span className="text-sm text-gray-500">
+                                    {new Date(order.orderDate).toLocaleTimeString("en-US", {
+                                        hour: "2-digit",
+                                        minute: "2-digit",
+                                    })}
+                                </span>
                             </div>
                         </TableCell>
-                        <TableCell>{order.city}</TableCell>
-                        <TableCell className={`capitalize `}>{getStatus(order.status)}</TableCell>
-                        <TableCell className="">{order.amount}</TableCell>
-                        {/* <TableCell className="flex items-center gap-3">
-              <ViewBookingDialog />
-              {order.status === "upcoming" && <CancelBookingDialog booking={order}/>}
-            </TableCell> */}
+                        <TableCell className="flex items-center gap-3  justify-end">
+                            <ViewOrderDialog order={order} />
+                            {order.status === "pending" && <CancelOrderDialog order={order} />}
+                        </TableCell>
                     </TableRow>
                 ))}
             </TableBody>

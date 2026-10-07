@@ -1,26 +1,26 @@
-import { useState } from "react";
 import { Button } from "./ui/button";
 
-function CancellationStatus() {
-  const [paymentStatus] = useState<"pending" | "successful" | "failed">(
-    "failed"
-  );
+
+interface StatusProps{
+    status:string
+}
+function OrderCancellationStatus({status}:StatusProps) {
+ 
   return (
     <div>
-      {paymentStatus === "pending" && <p>Your payment is being processed...</p>}
-      {paymentStatus === "successful" && (
+      {status === "success" && (
         <div>
           <div className="flex flex-col items-center justify-center">
             <div>
               <img src="/images/confirmed.png" alt="Confirmed" />
             </div>
-            <p className="mt-2 text-[#22C55E]">Booking Cancelled</p>
+            <p className="mt-2 text-[#22C55E]">Order Cancelled</p>
           </div>
           <div className=" my-3 border-t  border-2 border-dashed w-full border-[#E4E4E7] "></div>
 
           <div className="text-center space-y-4">
             <p className="text-[#3F3F46] ">
-              Your booking has been cancelled successfully. Your refund has been
+              Your order has been cancelled successfully. Your refund has been
               processed, and the amount will be returned to your payment method
               shortly.
             </p>
@@ -37,13 +37,13 @@ function CancellationStatus() {
             </Button>
 
             <Button className="rounded-full px-10 py-6 font-bold">
-              Book Again
+              Order Again
             </Button>
           </div>
         </div>
       )}
 
-      {paymentStatus === "failed" && (
+      {status === "failure" && (
         <div>
           <div className="flex flex-col items-center justify-center">
             <div>
@@ -78,4 +78,4 @@ function CancellationStatus() {
   );
 }
 
-export default CancellationStatus;
+export default OrderCancellationStatus;

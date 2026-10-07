@@ -50,20 +50,9 @@ function Services({ Services, loading }: ServiceProps) {
                 />
               </div>
 
-              {service.images?.length > 1 && (
-                <div className="flex gap-2 mt-2">
-                  {service.images.slice(1, 4).map((img, idx) => (
-                    <img
-                      key={idx}
-                      src={img}
-                      alt=""
-                      className="w-14 h-14 rounded-md object-cover"
-                    />
-                  ))}
-                </div>
-              )}
+             
               <p className="font-bold text-[#18181B] mt-4">{service.name}</p>
-              <p className="text-[#71717A] font-normal text-lg line-clamp-2">
+              <p className="text-[#71717A] font-normal text-lg line-clamp-2 hidden">
                 {service.description}
               </p>
               <Button
